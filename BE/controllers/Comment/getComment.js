@@ -1,3 +1,4 @@
+import Comment from '../../models/comment';
 const getComments = async (req, res) => {
     try {
       const comments = await Comment.find();

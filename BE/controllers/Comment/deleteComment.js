@@ -1,3 +1,4 @@
+import Comment from '../../models/comment';
 const deleteComment = async (req, res) => {
     try {
       const commentId = req.params.id;
