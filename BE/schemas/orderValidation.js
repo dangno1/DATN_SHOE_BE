@@ -65,10 +65,10 @@ const shippingAddressSchema = Joi.object({
 });
 
 const orderSchema = Joi.object({
-  // orderId: Joi.string().required().messages({
-  //   'string.empty': 'Order ID không được bỏ trống',
-  //   'any.required': 'Order ID là trường bắt buộc',
-  // }),
+  orderId: Joi.string().required().messages({
+    'string.empty': 'Order ID không được bỏ trống',
+    'any.required': 'Order ID là trường bắt buộc',
+  }),
   OrderItems: Joi.array()
     .items(orderItemSchema)
     .min(1)

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 const Schema = mongoose.Schema;
 const orderProduct = new Schema ({
-    
+    orderId: {type: String, require: true},
     OrderItems: [
         {
             ProductName: { type: String, required: true },
