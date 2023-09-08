@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import orderRoutes from './routes/orderRoutes.js';
+import orderRoutes from './src/routes/orderRoutes';
 
 const app = express();
 app.use(express.json());
