@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import commentRouter  from './routers/commentRouter';
+import commentRouter  from './src/routers/commentRouter';
 
 const app = express();
 app.use(express.json());
