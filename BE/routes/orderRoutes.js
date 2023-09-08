@@ -8,7 +8,7 @@ const router = express.Router();
 // Định nghĩa các tuyến cho đối tượng đơn hàng
 router.post('/orders', createOrder);
 router.get('/orders/:id', getOrderDetails);
-router.delete('/orders/:id', cancelOrder);
+router.delete('/orders/cancel/:orderId', cancelOrder);
 router.get('/orders', getAllOrders);
 
 export default router;

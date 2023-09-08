@@ -1,12 +1,11 @@
 import Joi from 'joi';
 
+
 const orderItemSchema = Joi.object({
-  ProductName: Joi.string()
-    .required()
-    .messages({
-      'string.empty': 'Product Name không được bỏ trống',
-      'any.required': 'Product Name là trường bắt buộc',
-    }),
+  ProductName: Joi.string().required().messages({
+    'string.empty': 'Product Name không được bỏ trống',
+    'any.required': 'Product Name là trường bắt buộc',
+  }),
   ProductQuantity: Joi.number()
     .integer()
     .min(1)
@@ -17,12 +16,10 @@ const orderItemSchema = Joi.object({
       'number.min': 'Product Quantity phải lớn hơn hoặc bằng 1',
       'any.required': 'Product Quantity là trường bắt buộc',
     }),
-  ProductImage: Joi.string()
-    .required()
-    .messages({
-      'string.empty': 'Product Image không được bỏ trống',
-      'any.required': 'Product Image là trường bắt buộc',
-    }),
+  ProductImage: Joi.string().required().messages({
+    'string.empty': 'Product Image không được bỏ trống',
+    'any.required': 'Product Image là trường bắt buộc',
+  }),
   ProductPrice: Joi.number()
     .min(0)
     .required()
@@ -35,29 +32,23 @@ const orderItemSchema = Joi.object({
     'string.empty': 'Product không được bỏ trống',
     'any.required': 'Product là trường bắt buộc',
   }),
-}).options({ abortEarly: false });
+});
+
 
 const shippingAddressSchema = Joi.object({
-  UserName: Joi.string()
-    .required()
-    .messages({
-      'string.empty': 'User Name không được bỏ trống',
-      'any.required': 'User Name là trường bắt buộc',
-    }),
-  UserAddress: Joi.string()
-    .required()
-    .messages({
-      'string.empty': 'User Address không được bỏ trống',
-      'any.required': 'User Address là trường bắt buộc',
-    }),
-  UserEmail: Joi.string()
-    .email()
-    .required()
-    .messages({
-      'string.empty': 'User Email không được bỏ trống',
-      'string.email': 'User Email phải là định dạng email hợp lệ',
-      'any.required': 'User Email là trường bắt buộc',
-    }),
+  UserName: Joi.string().required().messages({
+    'string.empty': 'User Name không được bỏ trống',
+    'any.required': 'User Name là trường bắt buộc',
+  }),
+  UserAddress: Joi.string().required().messages({
+    'string.empty': 'User Address không được bỏ trống',
+    'any.required': 'User Address là trường bắt buộc',
+  }),
+  UserEmail: Joi.string().email().required().messages({
+    'string.empty': 'User Email không được bỏ trống',
+    'string.email': 'User Email phải là định dạng email hợp lệ',
+    'any.required': 'User Email là trường bắt buộc',
+  }),
   UserPhone: Joi.number().required().messages({
     'number.base': 'User Phone phải là số',
     'any.required': 'User Phone là trường bắt buộc',
@@ -65,10 +56,6 @@ const shippingAddressSchema = Joi.object({
 });
 
 const orderSchema = Joi.object({
-  orderId: Joi.string().required().messages({
-    'string.empty': 'Order ID không được bỏ trống',
-    'any.required': 'Order ID là trường bắt buộc',
-  }),
   OrderItems: Joi.array()
     .items(orderItemSchema)
     .min(1)
