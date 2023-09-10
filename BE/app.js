@@ -1,3 +1,4 @@
+
 import mongoose from "mongoose";
 import express from "express";
 import productRouter from "./src/routers/product.js";
@@ -5,6 +6,7 @@ import categoryRouter from "./src/routers/category.js";
 import cors from "cors";
 import routerAuth from "./src/routers/auth.js";
 import routerUser from "./src/routers/user.js";
+import orderRoutes from './src/routes/orderRoutes';
 
 const app = express();
 
@@ -15,6 +17,8 @@ app.use("/api", productRouter);
 app.use("/api", categoryRouter);
 app.use("/api", routerAuth);
 app.use("/api", routerUser);
+app.use("/api", orderRoutes);
+
 
 const port = 8000;
 
