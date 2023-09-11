@@ -1,5 +1,5 @@
-import commentSchema from '../../Schema/validateComment'; 
-import Comment from '../../models/comment';
+import commentSchema from '../../schemas/validateComment.js'; 
+import Comment from '../../models/comment.js';
 
 const createComment = async (req, res) => {
   try {

@@ -5,7 +5,7 @@ import {
   getAll,
   remove,
   update,
-} from "../cotrollers/category/index.js";
+} from "../controllers/category/index.js";
 const router = express.Router();
 
 router.get("/categoryes", getAll);

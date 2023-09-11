@@ -1,6 +1,6 @@
 import express from 'express'
-import { signIn, signOut,signUp } from '../cotrollers/login/auth.js';
-import { blockUser, unblockUser } from '../cotrollers/user/khoaUser.js';
+import { signIn, signOut,signUp } from '../controllers/login/auth.js';
+import { blockUser, unblockUser } from '../controllers/user/khoaUser.js';
 
 const routerAuth = express.Router();
 

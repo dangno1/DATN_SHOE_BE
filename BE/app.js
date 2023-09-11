@@ -5,8 +5,9 @@ import categoryRouter from "./src/routers/category.js";
 import cors from "cors";
 import routerAuth from "./src/routers/auth.js";
 import routerUser from "./src/routers/user.js";
-import orderRoutes from './src/routes/orderRoutes';
+import orderRoutes from './src/routers/orderRoutes.js';
 import commentRouter  from './src/routers/commentRouter';
+import routeCart from "./src/routers/cart.js";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use("/api", routerAuth);
 app.use("/api", routerUser);
 app.use("/api", orderRoutes);
 app.use("/api", commentRouter);
+app.use("/api", routeCart);
 
 
 const port = 8000;

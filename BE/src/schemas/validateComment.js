@@ -20,10 +20,10 @@ const commentSchema = Joi.object({
     'string.pattern.base': 'Comment Content không được có quá 7 dấu cách',
   }),
 }).options({ abortEarly: false });
-const result = commentSchema.validate({ CommentContent: 'Đây là bình luận của tôi' });
-if (result.error) {
-  console.error(result.error.details);
-} else {
-  console.log('Hợp lệ');
-}
+// const result = commentSchema.validate({ CommentContent: 'Đây là bình luận của tôi' });
+// if (result.error) {
+//   // console.error(result.error.details);
+// } else {
+//   console.log('Hợp lệ');
+// }
 export default commentSchema;
