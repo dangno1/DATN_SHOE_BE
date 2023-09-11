@@ -1,8 +1,8 @@
 import express from 'express'
 
-import { addUser } from '../cotrollers/user/addUser.js';
-import { getAllUser } from '../cotrollers/user/ListUser.js';
-import { getDetail } from '../cotrollers/user/detail.js';
+import { addUser } from '../controllers/user/addUser.js';
+import { getAllUser } from '../controllers/user/ListUser.js';
+import { getDetail } from '../controllers/user/detail.js';
 
 
 const routerUser = express.Router();
