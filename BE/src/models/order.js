@@ -1,12 +1,12 @@
 import mongoose from 'mongoose'
 const Schema = mongoose.Schema;
 const orderProduct = new Schema ({
-    OrderItems: [
+    orderItems: [
         {
-            ProductName: { type: String, required: true },
-            ProductQuantity: { type: Number, required: true },
-            ProductImage: { type: String, required: true },
-            ProductPrice: { type: Number, required: true },
+            productName: { type: String, required: true },
+            productQuantity: { type: Number, required: true },
+            productImage: { type: String, required: true },
+            productPrice: { type: Number, required: true },
             product: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Product', // Tham chiếu đến mô hình sản phẩm
@@ -15,10 +15,10 @@ const orderProduct = new Schema ({
         },
     ],
     shippingAddress: {
-        UserName: { type: String, required: true },
-        UserAddress: { type: String, required: true },
-        UserEmail: { type: String, required: true },
-        UserPhone: { type: Number, required: true },
+        userName: { type: String, required: true },
+        userAddress: { type: String, required: true },
+        userEmail: { type: String, required: true },
+        userPhone: { type: Number, required: true },
     }
 })
 
