@@ -36,17 +36,9 @@ const productSchema = joi.object({
     "string.min": "name phải có ít nhất 3 ký tự",
   }),
 
-  image: joi.string().required().messages({
-    "string.empty": "image không được để trống",
-    "any.required": "image là trường bắt buộc",
-  }),
+  image: joi.any().meta({ swaggerType: "file" }),
 
-  images: joi.array().items(
-    joi.string().messages({
-      "string.empty": "images không được để trống",
-      "any.required": "images là trường bắt buộc",
-    })
-  ),
+  images: joi.array().items(joi.any().meta({ swaggerType: "file" })),
 
   desc: joi.string().messages({
     "string.empty": "description không được để trống",
