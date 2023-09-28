@@ -35,7 +35,7 @@ export const getAll = async (req, res) => {
 
 export const get = async (req, res) => {
   try {
-    const coupons = await Coupons.findById(req.params.id);
+    const coupons = await Coupons.findById(req.params.id).populate("products");
 
     if (!coupons) {
       return res.status(404).json({

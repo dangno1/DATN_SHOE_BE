@@ -58,7 +58,7 @@ const productSchema = joi.object({
     "string.empty": "Số lượng bán ra không được để trống",
     "any.required": "Số lượng bán ra là trường bắt buộc",
   }),
-  coupons: joi.string().required().messages({
+  couponsId: joi.string().required().messages({
     "string.empty": "Mã giảm giá không được để trống",
     "any.required": "Mã giảm giá là trường bắt buộc",
   }),

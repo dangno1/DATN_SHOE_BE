@@ -3,6 +3,7 @@ import Category from "../../models/category.js";
 import productSchema from "../../schemas/product.js";
 import Size from "../../models/size.js";
 import Color from "../../models/color.js";
+import Coupons from "../../models/coupons.js";
 
 export const create = async (req, res) => {
   try {
@@ -39,16 +40,10 @@ export const create = async (req, res) => {
       });
     }
 
-    // kiểm tra categoryId user nhập có tồn tại không
-    const category = await Category.findById(body.categoryId);
-    if (!category) {
-      return res.status(404).json({
-        success: false,
-        message: "Danh mục sản phẩm không tồn tại!",
-      });
-    }
+    // kiểm tra sizeId, colorId, couponsId, categoryId user nhập có tồn tại không
 
-    // kiểm tra sizeId, colorId, couponsId user nhập có tồn tại không
+    const category = await Category.findById(body.categoryId);
+    const coupons = await Coupons.findById(body.couponsId);
     const size = await Size.exists({
       _id: body.variants.map((variant) => variant.sizeId),
     });
@@ -56,21 +51,30 @@ export const create = async (req, res) => {
       _id: body.variants.map((variant) => variant.colorId),
     });
 
-    if (!size) {
+    // Thông báo lỗi nếu sizeId, colorId, couponsId, categoryId user nhập không tồn tại
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: "Danh mục sản phẩm không tồn tại!",
+      });
+    } else if (!size) {
       return res.status(404).json({
         success: false,
         message: "Kích cỡ không tồn tại!",
       });
-    }
-
-    if (!color) {
+    } else if (!color) {
       return res.status(404).json({
         success: false,
         message: "Màu sắc không tồn tại!",
       });
+    } else if (!coupons) {
+      return res.status(404).json({
+        success: false,
+        message: "Mã giảm giá không tồn tại!",
+      });
     }
 
-    // tạo mới sản phẩm
+    // Tạo mới sản phẩm
     const product = await Product.create({
       ...body,
       image: req.files["image"][0].path,
@@ -85,6 +89,12 @@ export const create = async (req, res) => {
 
     // thêm productId vào bảng category
     await Category.findByIdAndUpdate(product.categoryId, {
+      $addToSet: {
+        products: product._id,
+      },
+    });
+
+    await Coupons.findByIdAndUpdate(product.couponsId, {
       $addToSet: {
         products: product._id,
       },

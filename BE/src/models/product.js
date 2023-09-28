@@ -15,6 +15,7 @@ const productSchema = new mongoose.Schema(
     amountSold: Number,
     couponsId: {
       type: mongoose.Types.ObjectId,
+      ref: "Coupons",
       default: 0,
     },
     variants: [

@@ -3,7 +3,6 @@ import mongoosePaginate from "mongoose-paginate-v2";
 
 const categorySchema = new mongoose.Schema(
   {
-    id: String,
     name: String,
     products: [{ type: mongoose.Types.ObjectId, ref: "Product" }],
   },

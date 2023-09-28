@@ -35,7 +35,7 @@ export const getAll = async (req, res) => {
 
 export const get = async (req, res) => {
   try {
-    const size = await Size.findById(req.params.id);
+    const size = await Size.findById(req.params.id).populate("products");
 
     if (!size) {
       return res.status(404).json({

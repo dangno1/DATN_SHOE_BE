@@ -6,7 +6,6 @@ const couponsSchema = joi.object({
     "number.integer": "Mã giảm giá phải là một số nguyên",
     "number.positive": "Mã giảm giá phải là một số lớn hơn 0",
     "number.max": "Mã giảm giá không được lớn hơn 100",
-    "any.required": "Mã giảm giá là trường bắt buộc",
   }),
 });
 
