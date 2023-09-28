@@ -6,8 +6,9 @@ import Coupons from "../../models/coupons.js";
 
 export const remove = async (req, res) => {
   try {
-    const product = await Product.findOneAndDelete({ _id: req.params.id });
+    const product = await Product.findOneAndDelete({ _id: req.params.id }); // Xóa product
 
+    // Thông báo lỗi không tìm thấy product
     if (!product) {
       return res.status(404).json({
         success: false,
@@ -43,11 +44,14 @@ export const remove = async (req, res) => {
       },
     });
 
+    // Thông báo xóa product thành công
     return res.status(200).json({
+      success: true,
       message: "Xóa sản phẩm thành công",
-      product,
+      data: product,
     });
   } catch (error) {
+    // Thông báo khi server lỗi
     return res.status(500).json({
       message: error,
     });

@@ -13,7 +13,7 @@ export const create = async (req, res) => {
     // Phân giải chuỗi JSON từ variants
     body.variants = JSON.parse(body.variants);
 
-    // validate và thông báo lỗi
+    // validate và thông báo lỗi bằng joi
     const { error } = productSchema.validate(body, {
       abortEarly: false,
     });
@@ -41,7 +41,6 @@ export const create = async (req, res) => {
     }
 
     // kiểm tra sizeId, colorId, couponsId, categoryId user nhập có tồn tại không
-
     const category = await Category.findById(body.categoryId);
     const coupons = await Coupons.findById(body.couponsId);
     const size = await Size.exists({
@@ -115,18 +114,15 @@ export const create = async (req, res) => {
         })
     );
 
-    // Thực hiện cả hai thao tác trên song song
-    // await Promise.all([...sizeUpdates, ...colorUpdates]);
-
-    // thông báo tạo sản phẩm thành công
+    // thông báo tạo mới product thành công
     return res.status(201).json({
       success: true,
       message: "Tạo sản phẩm thành công",
       data: product,
     });
   } catch (error) {
+    // Thông báo khi server lỗi
     return res.status(500).json({
-      success: false,
       message: error.message,
     });
   }
