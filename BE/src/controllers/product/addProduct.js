@@ -1,6 +1,8 @@
 import Product from "../../models/product.js";
 import Category from "../../models/category.js";
 import productSchema from "../../schemas/product.js";
+import Size from "../../models/size.js";
+import Color from "../../models/color.js";
 
 export const create = async (req, res) => {
   try {
@@ -23,26 +25,48 @@ export const create = async (req, res) => {
     if (!req.files) {
       return res.status(400).json({
         success: false,
-        message: "Thiếu image và images!",
+        message: "Thiếu image và thumbnail!",
       });
     } else if (!req.files["image"]) {
       return res.status(400).json({
         success: false,
         message: "Thiếu image!",
       });
-    } else if (!req.files["images"]) {
+    } else if (!req.files["thumbnail"]) {
       return res.status(400).json({
         success: false,
-        message: "Thiếu images!",
+        message: "Thiếu thumbnail!",
       });
     }
 
     // kiểm tra categoryId user nhập có tồn tại không
-
     const category = await Category.findById(body.categoryId);
     if (!category) {
-      return res.status(400).json({
-        message: "Danh mục sản phẩm không tồn tại",
+      return res.status(404).json({
+        success: false,
+        message: "Danh mục sản phẩm không tồn tại!",
+      });
+    }
+
+    // kiểm tra sizeId, colorId, couponsId user nhập có tồn tại không
+    const size = await Size.exists({
+      _id: body.variants.map((variant) => variant.sizeId),
+    });
+    const color = await Color.exists({
+      _id: body.variants.map((variant) => variant.colorId),
+    });
+
+    if (!size) {
+      return res.status(404).json({
+        success: false,
+        message: "Kích cỡ không tồn tại!",
+      });
+    }
+
+    if (!color) {
+      return res.status(404).json({
+        success: false,
+        message: "Màu sắc không tồn tại!",
       });
     }
 
@@ -50,11 +74,12 @@ export const create = async (req, res) => {
     const product = await Product.create({
       ...body,
       image: req.files["image"][0].path,
-      images: req.files["images"].map((file) => file.path),
+      thumbnail: req.files["thumbnail"].map((file) => file.path),
     });
     if (!product) {
       return res.status(400).json({
-        message: "Không thể tạo sản phẩm",
+        success: false,
+        message: "Không thể tạo sản phẩm!",
       });
     }
 
@@ -65,14 +90,37 @@ export const create = async (req, res) => {
       },
     });
 
+    // thêm productId vào bảng Size
+    const sizeUpdates = body.variants.map((variant) =>
+      Size.findByIdAndUpdate(variant.sizeId, {
+        $addToSet: {
+          products: product._id,
+        },
+      })
+    );
+
+    // thêm productId vào bảng Color
+    const colorUpdates = body.variants.map((variant) =>
+      Color.findByIdAndUpdate(variant.colorId, {
+        $addToSet: {
+          products: product._id,
+        },
+      })
+    );
+
+    // Thực hiện cả hai thao tác trên song song
+    await Promise.all([...sizeUpdates, ...colorUpdates]);
+
     // thông báo tạo sản phẩm thành công
     return res.status(201).json({
+      success: true,
       message: "Tạo sản phẩm thành công",
       data: product,
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Lỗi server",
+      success: false,
+      message: error.message,
     });
   }
 };

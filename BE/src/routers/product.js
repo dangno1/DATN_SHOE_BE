@@ -16,7 +16,7 @@ router.post(
   "/products",
   upload.fields([
     { name: "image", maxCount: 1 },
-    { name: "images", maxCount: 20 },
+    { name: "thumbnail", maxCount: 20 },
   ]),
   create
 );

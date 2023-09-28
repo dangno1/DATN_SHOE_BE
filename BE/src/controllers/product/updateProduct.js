@@ -16,7 +16,8 @@ export const update = async (req, res) => {
 
     const category = await Category.findById(req.body.categoryId);
     if (!category) {
-      return res.status(400).json({
+      return res.status(404).json({
+        success: false,
         message: "Danh mục sản phẩm không tồn tại",
       });
     }

@@ -1,4 +1,4 @@
-import Product from "../../models/product.js";
+import Color from "../../models/color.js";
 
 export const getAll = async (req, res) => {
   const {
@@ -6,50 +6,46 @@ export const getAll = async (req, res) => {
     _limit = 10,
     _dateSort = "createAt",
     _dateOrder = "asc",
-    _priceSort = "price",
-    _priceOrder = "asc",
-    _amountSoldSort = "amountSold",
-    _amountSoldOrder = "asc",
+    _sizeSort = "value",
+    _sizeOrder = "asc",
   } = req.query;
   const options = {
     page: _page,
     limit: _limit,
     sort: {
       [_dateSort]: _dateOrder === "desc" ? -1 : 1,
-      [_priceSort]: _priceOrder === "desc" ? -1 : 1,
-      [_amountSoldSort]: _amountSoldOrder === "desc" ? -1 : 1,
+      [_sizeSort]: _sizeOrder === "desc" ? -1 : 1,
     },
   };
   try {
-    const { docs: products } = await Product.paginate({}, options);
-    if (products.length === 0) {
+    const { docs: colors } = await Color.paginate({}, options);
+    if (colors.length === 0) {
       return res.status(404).json({
         success: false,
         message: "Không có sản phẩm nào!",
       });
     }
-    return res.status(200).json(products);
+    return res.status(201).json(colors);
   } catch (error) {
     return res.status(500).json({
       message: error,
     });
   }
 };
-
 export const get = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const color = await Color.findById(req.params.id).populate("products");
 
-    if (!product) {
+    if (!color) {
       return res.status(404).json({
         success: false,
-        message: "Không có sản phẩm nào!",
+        message: "Không có color nào!",
       });
     }
 
-    return res.status(200).json(product);
+    return res.status(200).json(color);
   } catch (error) {
-    return res.status(500).json({
+    return res.status(400).json({
       message: error,
     });
   }
