@@ -5,7 +5,7 @@ import {
   getAll,
   remove,
   update,
-} from "../controllers/coupons/index";
+} from "../controllers/coupons/index.js";
 const router = express.Router();
 
 router.get("/coupons", getAll);
