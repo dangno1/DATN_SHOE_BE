@@ -54,9 +54,11 @@ const productSchema = joi.object({
     "string.empty": "Danh mục sản phẩm không được để trống",
     "any.required": "Danh mục sản phẩm là trường bắt buộc",
   }),
-  amountSold: joi.string().required().messages({
-    "string.empty": "Số lượng bán ra không được để trống",
-    "any.required": "Số lượng bán ra là trường bắt buộc",
+  amountSold: joi.number().integer().positive().required().messages({
+    "number.base": "Số lượng đã bán phải là một số",
+    "number.integer": "Số lượng đã bán phải là một số nguyên",
+    "number.positive": "Số lượng đã bán phải là một số lớn hơn 0",
+    "any.required": "Số lượng đã bán là trường bắt buộc",
   }),
   couponsId: joi.string().required().messages({
     "string.empty": "Mã giảm giá không được để trống",

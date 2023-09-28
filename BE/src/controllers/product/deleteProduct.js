@@ -2,6 +2,7 @@ import Product from "../../models/product.js";
 import Category from "../../models/category.js";
 import Size from "../../models/size.js";
 import Color from "../../models/color.js";
+import Coupons from "../../models/coupons.js";
 
 export const remove = async (req, res) => {
   try {
@@ -14,13 +15,7 @@ export const remove = async (req, res) => {
       });
     }
 
-    // Xóa productId trong mảng products của bảng Category
-    await Category.updateMany(
-      { categoryId: category._id },
-      { categoryId: null }
-    );
-
-    // Xóa productId trong mảng products của bảng Size
+    // Xóa productId trong mảng products của bảng category, size, color, coupons
     await Category.findByIdAndUpdate(product.categoryId, {
       $pull: {
         products: product._id,
@@ -42,6 +37,11 @@ export const remove = async (req, res) => {
         },
       }
     );
+    await Coupons.findByIdAndUpdate(product.couponsId, {
+      $pull: {
+        products: product._id,
+      },
+    });
 
     return res.status(200).json({
       message: "Xóa sản phẩm thành công",

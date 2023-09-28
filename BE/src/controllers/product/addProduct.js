@@ -87,39 +87,36 @@ export const create = async (req, res) => {
       });
     }
 
-    // thêm productId vào bảng category
+    // thêm productId vào bảng category, coupons, size, color.
     await Category.findByIdAndUpdate(product.categoryId, {
       $addToSet: {
         products: product._id,
       },
     });
-
     await Coupons.findByIdAndUpdate(product.couponsId, {
       $addToSet: {
         products: product._id,
       },
     });
-
-    // thêm productId vào bảng Size
-    const sizeUpdates = body.variants.map((variant) =>
-      Size.findByIdAndUpdate(variant.sizeId, {
-        $addToSet: {
-          products: product._id,
-        },
-      })
+    body.variants.map(
+      async (variant) =>
+        await Size.findByIdAndUpdate(variant.sizeId, {
+          $addToSet: {
+            products: product._id,
+          },
+        })
     );
-
-    // thêm productId vào bảng Color
-    const colorUpdates = body.variants.map((variant) =>
-      Color.findByIdAndUpdate(variant.colorId, {
-        $addToSet: {
-          products: product._id,
-        },
-      })
+    body.variants.map(
+      async (variant) =>
+        await Color.findByIdAndUpdate(variant.colorId, {
+          $addToSet: {
+            products: product._id,
+          },
+        })
     );
 
     // Thực hiện cả hai thao tác trên song song
-    await Promise.all([...sizeUpdates, ...colorUpdates]);
+    // await Promise.all([...sizeUpdates, ...colorUpdates]);
 
     // thông báo tạo sản phẩm thành công
     return res.status(201).json({
