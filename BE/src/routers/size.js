@@ -12,6 +12,6 @@ router.get("/size", getAll);
 router.get("/size/:id", get);
 router.post("/size", create);
 router.delete("/size/:id", remove);
-router.patch("/size/:id", update);
+router.patch("/size/update/:id", update);
 
 export default router;
