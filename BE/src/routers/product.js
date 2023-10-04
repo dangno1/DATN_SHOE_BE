@@ -21,6 +21,13 @@ router.post(
   create
 );
 router.delete("/products/:id", remove);
-router.patch("/products/:id", update);
+router.patch(
+  "/products/:id",
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "thumbnail", maxCount: 20 },
+  ]),
+  update
+);
 
 export default router;

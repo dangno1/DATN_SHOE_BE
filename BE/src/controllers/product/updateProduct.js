@@ -4,6 +4,12 @@ import productSchema from "../../schemas/product.js";
 
 export const update = async (req, res) => {
   try {
+    // Chuyển req.body thành một đối tượng thông thường
+    let body = JSON.parse(JSON.stringify(req.body));
+
+    // Phân giải chuỗi JSON từ variants
+    body.variants = JSON.parse(body.variants);
+
     // validate và thông báo lỗi bằng joi
     const { error } = productSchema.validate(req.body, {
       abortEarly: false,
@@ -24,10 +30,42 @@ export const update = async (req, res) => {
       });
     }
 
+    const productList = await Product.findById(req.params.id);
+
+    // Delete the existing image and thumbnail from Cloudinary
+    if (productList.image) {
+      await cloudinary.v2.uploader.destroy(product.image);
+    }
+    if (productList.thumbnail) {
+      for (const thumbnailUrl of product.thumbnail) {
+        await cloudinary.v2.uploader.destroy(thumbnailUrl);
+      }
+    }
+
+    // Upload the new image to Cloudinary
+    const uploadResult = await cloudinary.v2.uploader.upload(req.file.image);
+
+    // Update the product image
+    product.image = uploadResult.secure_url;
+
+    // Upload the thumbnail images to Cloudinary
+    const thumbnailUploadResults = await cloudinary.v2.uploader.upload(
+      req.file.thumbnail
+    );
+
+    // Update the product thumbnail
+    product.thumbnail = thumbnailUploadResults.map(
+      (result) => result.secure_url
+    );
+
     // Cập nhật product dựa vào id
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      { ...body, variants: body.variants.map((variant) => ({ ...variant })) },
+      {
+        new: true,
+      }
+    );
 
     // thông báo lỗi không tìm thấy product
     if (!product) {
