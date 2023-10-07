@@ -12,6 +12,6 @@ router.get("/color", getAll);
 router.get("/color/:id", get);
 router.post("/color", create);
 router.delete("/color/:id", remove);
-router.patch("/color/:id", update);
+router.patch("/color/update/:id", update);
 
 export default router;

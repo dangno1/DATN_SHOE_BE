@@ -9,7 +9,7 @@ import cors from "cors";
 import routerAuth from "./src/routers/auth.js";
 import routerUser from "./src/routers/user.js";
 import orderRoutes from "./src/routers/orderRoutes.js";
-import commentRouter from "./src/routers/commentRouter";
+import commentRouter from "./src/routers/commentRouter.js";
 import routeCart from "./src/routers/cart.js";
 
 const app = express();

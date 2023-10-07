@@ -16,7 +16,7 @@ export const update = async (req, res) => {
     const color = await Color.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
-    if (!size) {
+    if (!color) {
       return res.status(404).json({
         success: false,
         message: "Không tìm thấy color!",

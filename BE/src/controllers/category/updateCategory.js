@@ -22,12 +22,14 @@ export const update = async (req, res) => {
     // Thông báo lỗi không tìm thấy category
     if (!category) {
       return res.status(404).json({
+        success: false,
         message: "Không tìm thấy danh mục sản phẩm",
       });
     }
 
     // Thông báo cập nhật category thành công
     return res.status(200).json({
+      success: true,
       message: "cập nhật danh mục sản phẩm thành công",
       data: category,
     });

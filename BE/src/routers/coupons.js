@@ -12,6 +12,6 @@ router.get("/coupons", getAll);
 router.get("/coupons/:id", get);
 router.post("/coupons", create);
 router.delete("/coupons/:id", remove);
-router.patch("/coupons/:id", update);
+router.patch("/coupons/update/:id", update);
 
 export default router;

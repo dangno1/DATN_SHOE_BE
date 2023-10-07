@@ -4,6 +4,7 @@ import mongoosePaginate from "mongoose-paginate-v2";
 const couponsSchema = new mongoose.Schema(
   {
     value: Number,
+    quantity: Number,
     products: [{ type: mongoose.Types.ObjectId, ref: "Product" }],
   },
   { timestamps: true, versionKey: false }
