@@ -5,21 +5,34 @@ const productSchema = new mongoose.Schema(
   {
     name: String,
     image: String,
-    images: [String],
+    thumbnail: [String],
     desc: String,
     brand: String,
     categoryId: {
       type: mongoose.Types.ObjectId,
       ref: "Category",
     },
+    amountSold: Number,
+    couponsId: {
+      type: mongoose.Types.ObjectId,
+      ref: "Coupons",
+      default: 0,
+    },
     variants: [
       {
         _id: false,
-        size: Number,
-        color: String,
+        sizeId: {
+          type: mongoose.Types.ObjectId,
+        },
+        colorId: {
+          type: mongoose.Types.ObjectId,
+        },
         price: Number,
         quantity: Number,
-        status: Number,
+        status: {
+          type: Number,
+          default: 1,
+        },
       },
     ],
   },
