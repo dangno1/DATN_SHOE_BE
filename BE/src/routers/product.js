@@ -22,7 +22,7 @@ router.post(
 );
 router.delete("/products/:id", remove);
 router.patch(
-  "/products/:id",
+  "/products/update/:id",
   upload.fields([
     { name: "image", maxCount: 1 },
     { name: "thumbnail", maxCount: 20 },
