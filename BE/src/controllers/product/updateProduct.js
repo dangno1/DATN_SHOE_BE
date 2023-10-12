@@ -11,14 +11,6 @@ export const update = async (req, res) => {
     // Phân giải chuỗi JSON từ variants
     body.variants = JSON.parse(body.variants);
 
-    // Kiểm tra xem biến body.variants có phải là một mảng không
-    // if (!Array.isArray(body.variants)) {
-    //   return res.json({
-    //     success: false,
-    //     messages: "errrrr",
-    //   });
-    // }
-
     // validate và thông báo lỗi bằng joi
 
     const { error } = productSchema.validate(body, {

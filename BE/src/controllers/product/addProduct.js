@@ -42,7 +42,6 @@ export const create = async (req, res) => {
 
     // kiểm tra sizeId, colorId, couponsId, categoryId user nhập có tồn tại không
     const category = await Category.findById(body.categoryId);
-    const coupons = await Coupons.findById(body.couponsId);
     const size = await Size.exists({
       _id: body.variants.map((variant) => variant.sizeId),
     });
@@ -65,11 +64,6 @@ export const create = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "Màu sắc không tồn tại!",
-      });
-    } else if (!coupons) {
-      return res.status(404).json({
-        success: false,
-        message: "Mã giảm giá không tồn tại!",
       });
     }
 

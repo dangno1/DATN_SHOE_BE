@@ -12,12 +12,6 @@ const productSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Category",
     },
-    amountSold: Number,
-    couponsId: {
-      type: mongoose.Types.ObjectId,
-      ref: "Coupons",
-      default: 0,
-    },
     variants: [
       {
         _id: false,
@@ -28,6 +22,8 @@ const productSchema = new mongoose.Schema(
           type: mongoose.Types.ObjectId,
         },
         price: Number,
+        discount: Number,
+        amountSold: Number,
         quantity: Number,
         status: {
           type: Number,

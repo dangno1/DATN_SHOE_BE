@@ -15,6 +15,16 @@ const variantSchema = joi.object({
     "number.positive": "Giá phải là một số lớn hơn 0",
     "any.required": "Giá là trường bắt buộc",
   }),
+  discount: joi.number().integer().required().messages({
+    "number.base": "Giảm giá phải là một số",
+    "number.integer": "Giảm giá phải là một số nguyên",
+    "any.required": "Giảm giá là trường bắt buộc",
+  }),
+  amountSold: joi.number().integer().required().messages({
+    "number.base": "Số lượng đã bán phải là một số",
+    "number.integer": "Số lượng đã bán phải là một số nguyên",
+    "any.required": "Số lượng đã bán là trường bắt buộc",
+  }),
   quantity: joi.number().integer().positive().required().messages({
     "number.base": "Số lượng phải là một số",
     "number.integer": "Số lượng phải là một số nguyên",
@@ -53,16 +63,6 @@ const productSchema = joi.object({
   categoryId: joi.string().required().messages({
     "string.empty": "Danh mục sản phẩm không được để trống",
     "any.required": "Danh mục sản phẩm là trường bắt buộc",
-  }),
-  amountSold: joi.number().integer().positive().required().messages({
-    "number.base": "Số lượng đã bán phải là một số",
-    "number.integer": "Số lượng đã bán phải là một số nguyên",
-    "number.positive": "Số lượng đã bán phải là một số lớn hơn 0",
-    "any.required": "Số lượng đã bán là trường bắt buộc",
-  }),
-  couponsId: joi.string().required().messages({
-    "string.empty": "Mã giảm giá không được để trống",
-    "any.required": "Mã giảm giá là trường bắt buộc",
   }),
 });
 
