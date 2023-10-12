@@ -17,7 +17,6 @@ export const update = async (req, res) => {
       abortEarly: false,
     });
     if (error) {
-      console.log(error);
       return res.json({
         success: false,
         messages: error.details.map((detail) => detail.message),
