@@ -70,6 +70,11 @@ const cartSchema = Joi.object({
     "string.empty": "category không được bỏ trống",
     "any.required": "category là trường bắt buộc",
   }),
+  initialPrice: Joi.number().min(0).required().messages({
+    "number.base": "totalPrice phải là số",
+    "number.min": "totalPrice phải lớn hơn hoặc bằng 0",
+    "any.required": "totalPrice là trường bắt buộc",
+  }),
   color: Joi.string()
     .trim()
     .min(2)
@@ -85,6 +90,12 @@ const cartSchema = Joi.object({
       "any.required": "color là trường bắt buộc",
       "string.min": "color phải có ít nhất 2 ký tự",
       "string.trim": "color không được chứa tất cả là khoảng trắng",
+    }),
+    status: Joi.string().required().messages({
+      "string.empty": "category không được bỏ trống",
+      "any.required": "category là trường bắt buộc",
+    }),
+    image:  Joi.string().required().messages({
     }),
 }).options({ abortEarly: false });
 
