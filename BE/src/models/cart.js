@@ -9,9 +9,12 @@ const cartSchema = new Schema({
     productName: String,
     quantity: Number,
     price: Number,
+    initialPrice: Number,
     totalPrice: Number,
-    category: Number,
-    color: String
+    category: String,
+    image: String,
+    color: String,
+    status: String,
 });
 
 export default mongoose.model("Cart", cartSchema);
