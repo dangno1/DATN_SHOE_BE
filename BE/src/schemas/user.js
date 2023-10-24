@@ -5,18 +5,17 @@ const signupSchema = Joi.object({
     "string.empty": "Fullname không được để trống",
     "any.required": "Fullname là trường bắt buộc",
     "string.min": "Fullname phải có ít nhất 5 ký tự",
-   
 }),
   username: Joi.string()
     .required()
     .min(5)
-    .regex(/^[a-zA-Z]+$/)
+    .regex(/^[a-zA-Z0-9]+$/)
     .messages({
       "string.empty": "username không được để trống",
       "any.required": "username là trường bắt buộc",
       "string.min": "username phải có ít nhất 5 ký tự",
       "string.pattern.base":
-        "UserName chỉ được chứa các ký tự chữ cái Và viết liền không dấu",
+        "UserName chỉ được chứa các ký tự chữ cái, số Và viết liền không dấu",
     }),
   email: Joi.string()
     .email({ tlds: { allow: false } })
@@ -26,9 +25,9 @@ const signupSchema = Joi.object({
       "any.required": "Email là trường bắt buộc",
       "string.email": "Email không hợp lệ, email phải có @ và . ",
     }),
-    phone: Joi.string().required().pattern(new RegExp(/^[0-9]{10}$/)).messages({
+    phone: Joi.string().required().pattern(/^[0]{1}[0-9]{9}$/).messages({
       'string.empty': 'Số điện thoại không được để trống',
-      'string.pattern.base': 'Số điện thoại phải có đúng 10 chữ số',
+      'string.pattern.base': 'Số điện thoại phải bắt đầu bằng số 0 và có đúng 10 chữ số',
       'any.required': 'Số điện thoại là trường bắt buộc',
   }),
   password: Joi.string().required().min(5).messages({

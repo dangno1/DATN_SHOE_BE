@@ -1,10 +1,10 @@
 import User from "../../models/user.js";
 import bcrypt from "bcryptjs"; 
-import userSchema from "../../schemas/userSchema.js";
+import { userSchema } from "../../schemas/userSchema.js";
 
 export const addUser = async (req, res) => {
   try {
-    const {fullname, username, email, password,phone, address, isBlocked} = req.body;
+    const {fullname, username, email, password,phone, address, isBlocked,confirmPassword} = req.body;
     const { error } = userSchema.validate(req.body, {
       abortEarly: false,
     });
@@ -14,7 +14,12 @@ export const addUser = async (req, res) => {
         messages: error.details.map((detail) => detail.message),
       });
     }
-
+    if (password !== confirmPassword) {
+      return res.json({
+        success: false,
+        message: "Mật khẩu và xác nhận mật khẩu không khớp",
+      });
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     
     const checkEmail = await User.findOne({ email })
@@ -30,7 +35,8 @@ export const addUser = async (req, res) => {
       phone,
       address,
       password: hashedPassword,
-      isBlocked:false
+      isBlocked:false,
+      role:'admin'
     });
 
     await newUser.save();
