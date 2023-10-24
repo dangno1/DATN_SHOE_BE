@@ -1,18 +1,11 @@
 import Category from "../../models/category.js";
 
 export const getAll = async (req, res) => {
-  const {
-    _page = 1,
-    _limit = 10,
-    _sort = "createAt",
-    _order = "asc",
-  } = req.query;
-
   const options = {
-    page: _page,
-    limit: _limit,
+    limit: 1000000000000,
     sort: {
-      [_sort]: _order === "desc" ? -1 : 1,
+      updatedAt: -1,
+      createdAt: -1,
     },
   };
   try {

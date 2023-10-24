@@ -64,6 +64,9 @@ const productSchema = joi.object({
     "string.empty": "Danh mục sản phẩm không được để trống",
     "any.required": "Danh mục sản phẩm là trường bắt buộc",
   }),
+  isDelete: joi.boolean().optional().messages({
+    "boolean.base": "isDelete phải là kiểu boolean",
+  }),
 });
 
 export default productSchema;

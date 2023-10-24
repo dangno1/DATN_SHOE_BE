@@ -1,86 +1,89 @@
 import Product from "../../models/product.js";
 import Category from "../../models/category.js";
 import productSchema from "../../schemas/product.js";
-import { v2 as cloudinary } from "cloudinary";
+import cloudinary from "../../configs/cloudinary.js";
 
 export const update = async (req, res) => {
   try {
-    // Chuyển req.body thành một đối tượng thông thường
     let body = JSON.parse(JSON.stringify(req.body));
-
-    // Phân giải chuỗi JSON từ variants
     body.variants = JSON.parse(body.variants);
 
-    // validate và thông báo lỗi bằng joi
-
-    const { error } = productSchema.validate(body, {
-      abortEarly: false,
-    });
+    const { error } = productSchema.validate(
+      { ...body, thumbnail: undefined },
+      {
+        abortEarly: false,
+      }
+    );
     if (error) {
       return res.json({
-        success: false,
+        error: true,
         messages: error.details.map((detail) => detail.message),
       });
     }
 
-    // Thông báo lỗi không tìm thấy category
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({
+        error: true,
+        message: "Sản phẩm không tồn tại",
+      });
+    }
+
     const category = await Category.findById(req.body.categoryId);
     if (!category) {
       return res.status(404).json({
-        success: false,
+        error: true,
         message: "Danh mục sản phẩm không tồn tại",
       });
     }
 
-    const productList = await Product.findById(req.params.id);
-
-    // Delete the existing image and thumbnail from Cloudinary
-    if (productList) {
-      if (productList.image) {
-        const idImage = productList.image.split("/");
-        await cloudinary.uploader.destroy(
-          idImage[idImage.length - 1].split(".")[0]
-        );
-      }
-      for (const thumbnail of productList.thumbnail) {
-        const idThumbnail = thumbnail.split("/");
-        await cloudinary.uploader.destroy(
-          idThumbnail[idThumbnail.length - 1].split(".")[0]
-        );
-      }
+    if (req.files["image"]) {
+      const splitUrlImage = product.image.split("/");
+      const publicIdImage =
+        splitUrlImage[splitUrlImage.length - 1].split(".")[0];
+      await cloudinary.uploader.destroy(
+        `${process.env.FOLDER_CLOUDINARY}/${publicIdImage}`
+      );
     }
 
-    // Cập nhật product dựa vào id
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
+    if (!req.files["thumbnail"] & (product.thumbnail.length === 0)) {
+      return res.status(400).json({
+        error: true,
+        message: "Chọn tối thiểu 1 thumbnail",
+      });
+    }
+
+    const idProduct = req.params.id;
+    const imagePath = req.files["image"]?.[0].path;
+    const thumbnailPath = req.files["thumbnail"]?.map((file) => file.path);
+    const newProduct = await Product.findByIdAndUpdate(
+      idProduct,
       {
         ...body,
-        image: req.files["image"][0].path,
-        thumbnail: req.files["thumbnail"].map((file) => file.path),
+        image: imagePath,
+        thumbnail: thumbnailPath && [...thumbnailPath, ...product.thumbnail],
       },
       {
         new: true,
       }
     );
 
-    // thông báo lỗi không tìm thấy product
-    if (!product) {
+    if (!newProduct) {
       return res.status(404).json({
-        success: false,
-        message: "Không tìm thấy sản phẩm",
+        error: true,
+        message: "Cập nhật thất bại",
       });
     }
 
-    // Thông báo cập nhật product thành công
     return res.status(201).json({
       success: true,
-      message: "Sản phẩm đã được cập nhật thành công",
-      data: product,
+      message: "Cập nhật thành công",
+      data: newProduct,
     });
   } catch (error) {
-    // Thông báo khi server lỗi
     return res.status(500).json({
-      message: error,
+      error: true,
+      message: error.message,
     });
   }
 };
