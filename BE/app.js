@@ -11,6 +11,7 @@ import routerUser from "./src/routers/user.js";
 import orderRoutes from "./src/routers/orderRoutes.js";
 import commentRouter from "./src/routers/commentRouter.js";
 import routeCart from "./src/routers/cart.js";
+import routerOderProduct from "./src/routers/orderedProducts.js";
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use("/api", routerUser);
 app.use("/api", orderRoutes);
 app.use("/api", commentRouter);
 app.use("/api", routeCart);
+app.use("/api", routerOderProduct)
 
 const port = 8000;
 
