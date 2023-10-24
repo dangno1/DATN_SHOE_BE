@@ -3,7 +3,6 @@ import User from "../models/user.js";
 import dotenv from "dotenv";
 dotenv.config();
 
-
 export const checkPermission = async (req, res, next) => {
   try {
     const autho = req.headers.authorization;

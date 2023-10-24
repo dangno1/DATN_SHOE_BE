@@ -1,20 +1,11 @@
 import Coupons from "../../models/coupons.js";
 
 export const getAll = async (req, res) => {
-  const {
-    _page = 1,
-    _limit = 10,
-    _dateSort = "createAt",
-    _dateOrder = "asc",
-    _couponsSort = "value",
-    _couponsOrder = "asc",
-  } = req.query;
   const options = {
-    page: _page,
-    limit: _limit,
+    limit: 1000000000000,
     sort: {
-      [_dateSort]: _dateOrder === "desc" ? -1 : 1,
-      [_couponsSort]: _couponsOrder === "desc" ? -1 : 1,
+      updatedAt: -1,
+      createdAt: -1,
     },
   };
   try {

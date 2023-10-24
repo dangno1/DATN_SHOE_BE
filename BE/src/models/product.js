@@ -31,6 +31,10 @@ const productSchema = new mongoose.Schema(
         },
       },
     ],
+    isDelete: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true, versionKey: false }
 );
