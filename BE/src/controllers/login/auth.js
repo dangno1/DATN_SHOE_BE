@@ -48,6 +48,80 @@ export const signUp = async (req, res) => {
   }
 };
 
+// export const signIn = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+//     const { error } = signinSchema.validate(req.body, {
+//       abortEarly: false,
+//     });
+//     if (error) {
+//       return res.json({
+//         success: false,
+//         messages: error.details.map((detail) => detail.message),
+//       });
+//     }
+//     const haveUser = await User.findOne({ email });
+//     if (!haveUser) {
+//       return res.status(400).json({
+//         message: "Email không tồn tại",
+//       });
+//     }
+//     if (haveUser.isBlocked) {
+//       return res.status(403).json({ message: "Tài khoản của bạn đã bị khóa" });
+//     }
+//     const checkPass = await bcryptjs.compare(password, haveUser.password);
+//     if (!checkPass) {
+//       return res.status(400).json({
+//         message: "Mật khẩu không chính xác",
+//       });
+//     }
+//     const token = jwt.sign(
+//       {
+//         id: haveUser.id,
+//       },
+//       SECRET_CODE,
+//       { expiresIn: "1d" }
+//     );
+//     haveUser.password = undefined;
+//     return res.status(200).json({
+//       message: "Đăng nhập thành công",
+//       accessToken: token,
+//       user: haveUser,
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       message: "Lỗi server",
+//     });
+//   }
+// };
+
+
+export const signOut = async (req, res) => {
+  try {
+    if (isLoggedOut) {
+      return res.status(400).json({
+        message: "Bạn đã đăng xuất rồi",
+      });
+    }
+    // Xóa token bằng cách xóa cookie chứa token
+    res.clearCookie("token");
+
+    // Đánh dấu người dùng đã đăng xuất
+    isLoggedOut = true;
+
+    return res.status(200).json({
+      message: "Đăng xuất thành công",
+    });
+    //res.redirect("/");  Chuyển hướng người dùng về trang chủ
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi server",
+    });
+  }
+};
+
+
+
 export const signIn = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -82,38 +156,15 @@ export const signIn = async (req, res) => {
       SECRET_CODE,
       { expiresIn: "1d" }
     );
+    
+    // Đặt JWT vào cookie thay vì accessToken
+    res.cookie('jwt', token, { httpOnly: true, maxAge: 86400000 }); // 1 ngày
+    
     haveUser.password = undefined;
     return res.status(200).json({
       message: "Đăng nhập thành công",
-      accessToken: token,
       user: haveUser,
     });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Lỗi server",
-    });
-  }
-};
-
-
-export const signOut = async (req, res) => {
-  try {
-    if (isLoggedOut) {
-      return res.status(400).json({
-        message: "Bạn đã đăng xuất rồi",
-      });
-    }
-
-    // Xóa token bằng cách xóa cookie chứa token
-    res.clearCookie("token");
-
-    // Đánh dấu người dùng đã đăng xuất
-    isLoggedOut = true;
-
-    return res.status(200).json({
-      message: "Đăng xuất thành công",
-    });
-    //res.redirect("/");  Chuyển hướng người dùng về trang chủ
   } catch (error) {
     return res.status(500).json({
       message: "Lỗi server",
