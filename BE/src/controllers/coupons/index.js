@@ -1,6 +1,6 @@
-import { getAll, get } from "./getCoupons.js";
-import { create } from "./addcoupons.js";
-import { update } from "./updatecoupons.js";
-import { remove } from "./deletecoupons.js";
+import { getAllCoupons, getCouponById } from "./getcoupons.js";
+import { createCoupon } from "./addcoupons.js";
+import { updateCoupon } from "./updatecoupons.js";
+import { deleteCoupon } from "./deletecoupons.js";
 
-export { get, getAll, create, remove, update };
+export { getCouponById, getAllCoupons, createCoupon, deleteCoupon, updateCoupon };

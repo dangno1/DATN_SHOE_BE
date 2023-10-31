@@ -1,17 +1,38 @@
-import joi from "joi";
+import mongoose from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
+import Joi from 'joi';
 
-const couponsSchema = joi.object({
-  value: joi.number().integer().positive().required().max(100).messages({
-    "number.base": "Giá trị mã giảm giá phải là một số",
-    "number.integer": "Giá trị mã giảm giá phải là một số nguyên",
-    "number.positive": "Giá trị mã giảm giá phải là một số lớn hơn 0",
-    "number.max": "Giá trị mã giảm giá không được lớn hơn 100",
-  }),
-  quantity: joi.number().integer().positive().required().messages({
-    "number.base": "Số lượng mã giảm giá phải là một số",
-    "number.integer": "Số lượng mã giảm giá phải là một số nguyên",
-    "number.positive": "Số lượng mã giảm giá phải là một số lớn hơn 0",
-  }),
+const couponsSchema = new mongoose.Schema(
+  {
+    code: String,
+    quantity: Number,
+    products: [
+      {
+        product: { type: mongoose.Types.ObjectId, ref: 'Product' },
+        discountType: String,
+        discountValue: Number,
+      },
+    ],
+  },
+  { timestamps: true, versionKey: false }
+);
+
+couponsSchema.plugin(mongoosePaginate);
+
+const productSchema = Joi.object({
+  product: Joi.string().required(),
+  discountType: Joi.string().valid('phần trăm', 'cố định').required(),
+  discountValue: Joi.number().required(),
 });
 
-export default couponsSchema;
+const couponSchema = Joi.object({
+  code: Joi.string().required(),
+  quantity: Joi.number().integer().positive().required(),
+  products: Joi.array().items(productSchema).min(1).required(),
+  discountType: Joi.string().valid("phần trăm", "cố định").required(),
+  discountValue: Joi.number().positive().required(),
+});
+
+const Coupons = mongoose.model('Coupons', couponsSchema);
+
+export { Coupons, couponSchema };
