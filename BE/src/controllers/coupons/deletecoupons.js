@@ -1,25 +1,34 @@
-import { Coupons } from '../../schemas/coupons'; // Đảm bảo bạn đã đúng đường dẫn tới file couponsModel
+import Coupons from "../../models/coupons.js";
+import Product from "../../models/product.js";
 
-export const deleteCoupon = async (req, res) => {
+export const remove = async (req, res) => {
   try {
-    // Kiểm tra tính hợp lệ của couponId
-    const { error, value } = Joi.object({
-      couponId: Joi.string().alphanum().length(24).required(),
-    }).validate({ couponId: req.params.id });
+    const coupons = await Coupons.findOneAndDelete({
+      _id: req.params.id,
+    });
 
-    if (error) {
-      return res.status(400).json({ error: 'Coupon ID không hợp lệ' });
-    }
-    const couponId = value.couponId;
-    const result = await Coupons.findByIdAndDelete(couponId);
+    await Product.updateMany({ coupons: coupons._id }, { coupons: 0 });
 
-    if (!result) {
-      return res.status(404).json({ error: 'Coupon not found' });
+    if (coupons.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy mã giảm giá!",
+      });
     }
 
-    res.json({ message: 'Đã xóa phiếu giảm giá thành công' });
+    await Product.findByIdAndUpdate(coupons._id, {
+      $pull: {
+        products: coupons._id,
+      },
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Xóa mã giảm giá thành công",
+      data: coupons,
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Xóa phiếu giảm giá không thành công' });
+    return res.status(500).json({
+      message: error,
+    });
   }
 };

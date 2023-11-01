@@ -1,22 +1,33 @@
-import { Coupons, couponSchema } from '../../schemas/coupons'; // Đảm bảo bạn đã đúng đường dẫn tới file couponsModel
+import Coupons from "../../models/coupons.js";
+import couponsSchema from "../../schemas/coupons.js";
 
-export const createCoupon = async (req, res) => {
+export const create = async (req, res) => {
   try {
-    // Kiểm tra dữ liệu đầu vào với schema sử dụng Joi
-    const { error, value } = couponSchema.validate(req.body);
-    
+    const { error } = couponsSchema.validate(req.body, {
+      abortEarly: false,
+    });
     if (error) {
-      // Trả về lỗi nếu dữ liệu không hợp lệ
-      return res.status(400).json({ error: error.details[0].message });
+      return res.json({
+        success: false,
+        messages: error.details.map((detail) => detail.message),
+      });
     }
 
-    // Nếu dữ liệu hợp lệ, tiếp tục tạo phiếu giảm giá
-    const { code, quantity, products } = value;
-    const coupon = new Coupons({ code, quantity, products });
-    const savedCoupon = await coupon.save();
-    res.status(201).json({ message: 'Phiếu giảm giá đã được tạo thành công', coupon: savedCoupon });
+    const coupons = await Coupons.create(req.body);
+    if (!coupons) {
+      return res.status(400).json({
+        success: false,
+        message: "Không thể tạo mã giảm giá!",
+      });
+    }
+    return res.status(201).json({
+      success: true,
+      message: "Tạo mã giảm giá thành công",
+      data: coupons,
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Tạo phiếu giảm giá không thành công' });
+    return res.status(500).json({
+      message: error,
+    });
   }
 };

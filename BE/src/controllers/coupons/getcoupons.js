@@ -1,35 +1,44 @@
-import { Coupons } from '../../schemas/coupons'; // Đảm bảo bạn đã đúng đường dẫn tới file couponsModel
+import Coupons from "../../models/coupons.js";
 
-export const getAllCoupons = async (req, res) => {
+export const getAll = async (req, res) => {
+  const options = {
+    limit: 1000000000000,
+    sort: {
+      updatedAt: -1,
+      createdAt: -1,
+    },
+  };
   try {
-    const coupons = await Coupons.find().populate('products.product');
-    res.json(coupons);
+    const { docs: coupons } = await Coupons.paginate({}, options);
+    if (coupons.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Không có mã giảm giá nào!",
+      });
+    }
+    return res.status(200).json(coupons);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Không thể truy xuất phiếu giảm giá' });
+    return res.status(500).json({
+      message: error,
+    });
   }
 };
 
-export const getCouponById = async (req, res) => {
+export const get = async (req, res) => {
   try {
-    // Kiểm tra tính hợp lệ của couponId
-    const { error, value } = Joi.object({
-      couponId: Joi.string().alphanum().length(24).required(),
-    }).validate({ couponId: req.params.id });
+    const coupons = await Coupons.findById(req.params.id).populate("products");
 
-    if (error) {
-      return res.status(400).json({ error: 'Coupon ID không hợp lệ' });
+    if (!coupons) {
+      return res.status(404).json({
+        success: false,
+        message: "Không có mã giảm giá nào!",
+      });
     }
-    const couponId = value.couponId;
-    const coupon = await Coupons.findById(couponId).populate('products.product');
 
-    if (!coupon) {
-      return res.status(404).json({ error: 'Không tìm thấy phiếu giảm giá' });
-    }
-    
-    res.json(coupon);
+    return res.status(201).json(coupons);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Không thể truy xuất phiếu giảm giá theo ID' });
+    return res.status(400).json({
+      message: error,
+    });
   }
 };

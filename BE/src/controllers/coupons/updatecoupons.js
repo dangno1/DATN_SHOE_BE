@@ -1,26 +1,36 @@
-import { Coupons, couponSchema } from '../../schemas/coupons'; // Đảm bảo bạn đã đúng đường dẫn tới file couponsModel
+import Coupons from "../../models/coupons.js";
+import couponsSchema from "../../schemas/coupons.js";
 
-export const updateCoupon = async (req, res) => {
+export const update = async (req, res) => {
   try {
-    // Kiểm tra tính hợp lệ của dữ liệu đầu vào với schema sử dụng Joi
-    const { error, value } = couponSchema.validate(req.body);
+    const { error } = couponsSchema.validate(req.body, {
+      abortEarly: false,
+    });
     if (error) {
-      return res.status(400).json({ error: error.details[0].message });
+      return res.json({
+        success: false,
+        messages: error.details.map((detail) => detail.message),
+      });
     }
 
-    const updatedCouponData = value;
-    const couponId = req.params.id;
-
-    // Tìm và cập nhật phiếu giảm giá bằng ID
-    const updatedCoupon = await Coupons.findByIdAndUpdate(couponId, updatedCouponData, { new: true });
-
-    if (!updatedCoupon) {
-      return res.status(404).json({ error: 'Không tìm thấy phiếu giảm giá' });
+    const coupons = await Coupons.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    if (!coupons) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy mã giảm giá!",
+      });
     }
 
-    res.json(updatedCoupon);
+    return res.status(201).json({
+      success: true,
+      message: "mã giảm giá đã được cập nhật thành công",
+      data: coupons,
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Không thể cập nhật phiếu giảm giá' });
+    return res.status(500).json({
+      message: error,
+    });
   }
 };
