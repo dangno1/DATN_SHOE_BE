@@ -3,10 +3,6 @@ import Category from "../../models/category.js";
 export const getAll = async (req, res) => {
   const options = {
     limit: 1000000000000,
-    sort: {
-      updatedAt: -1,
-      createdAt: -1,
-    },
   };
   try {
     const { docs: categoryes } = await Category.paginate({}, options);
@@ -25,9 +21,10 @@ export const getAll = async (req, res) => {
 
 export const get = async (req, res) => {
   try {
-    const category = await Category.findById(req.params.id).populate(
-      "products"
-    );
+    const category = await Category.findById(req.params.id).populate({
+      path: "products",
+      match: { isDelete: { $eq: false } },
+    });
     if (!category) {
       return res.status(404).json({
         message: "Danh mục sản phẩm không tồn tại",
