@@ -3,6 +3,7 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { signinSchema, signupSchema } from "../../schemas/user.js";
+import nodemailer from "nodemailer";
 dotenv.config();
 
 const SECRET_CODE = "s";
@@ -171,3 +172,212 @@ export const signIn = async (req, res) => {
     });
   }
 };
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    // Kiểm tra xem email có tồn tại trong cơ sở dữ liệu
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        message: "Email không tồn tại",
+      });
+    }
+    // Tạo mã OTP ngẫu nhiên
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    // Gửi mã OTP qua email
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: "truongduy97a@gmail.com",
+        pass: "qejcmqsanvaoircm",
+      },
+    });
+    // Hàm để gửi email
+    async function sendEmail(email, otp) {
+      try {
+        const info = await transporter.sendMail({
+          from: 'truongduy97a@gmail.com', // Điền thông tin người gửi ở đây
+          to:email, // Địa chỉ email người nhận
+          subject: "Mã xác nhận đổi mật khẩu", // Tiêu đề email
+          text: `Mã xác nhận của bạn là: ${otp}`, // Nội dung email dạng text
+        });
+        console.log("Message sent: %s", info.messageId);
+        return true;
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
+    }
+    // Sử dụng hàm sendEmail để gửi email
+    async function main() {
+      const { email } = req.body;
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).json({
+          message: "Email không tồn tại",
+        });
+      }
+      // Tạo mã OTP ngẫu nhiên
+      const otp = Math.floor(1000 + Math.random() * 9000);
+      // Gửi email
+      const emailSent = await sendEmail(email, otp);
+      if (emailSent) {
+        // Lưu mã OTP vào cơ sở dữ liệu
+        user.otp = otp;
+        user.save();
+        return res.status(200).json({ message: "Mã xác nhận đã được gửi qua email." });
+      } else {
+        return res.status(500).json({ message: "Lỗi khi gửi email xác nhận." });
+      }
+    }
+    main().catch(console.error);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Lỗi server",
+    });
+  }
+};
+
+// export const resetPassword = async (req, res) => {
+//   try {
+//     const { email, otp, newPassword, confirmPassword } = req.body;
+    
+//     // Kiểm tra xem mã OTP người dùng nhập có khớp với mã OTP mới trong cơ sở dữ liệu không
+//     const user = await User.findOne({ email, otp });
+    
+//     if (!user) {
+//       return res.status(400).json({ message: 'Mã xác nhận không hợp lệ.' });
+//     }
+    
+//     // Kiểm tra xác thực mật khẩu
+//     if (newPassword !== confirmPassword) {
+//       return res.status(400).json({ message: 'Mật khẩu và xác nhận mật khẩu không khớp.' });
+//     }
+    
+//     // Tại đây, xác minh mã OTP và mật khẩu đã thành công, tiến hành cập nhật mật khẩu
+//     const hashedPassword = await bcryptjs.hash(newPassword, 15);
+    
+//     // Cập nhật mật khẩu và xóa mã OTP
+//     user.password = hashedPassword;
+//     user.otp = null;
+//     await user.save();
+    
+//     return res.status(200).json({ message: 'Mật khẩu đã được đổi thành công.' });
+//   } catch (error) {
+//     return res.status(500).json({
+//       message: "Lỗi server",
+//     });
+//   }
+// };
+
+export const otpauthentication = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    
+    // Kiểm tra xem mã OTP người dùng nhập có khớp với mã OTP mới trong cơ sở dữ liệu không
+    const user = await User.findOne({ email, otp });
+    
+    if (!user) {
+      return res.status(400).json({ message: 'Mã xác nhận không hợp lệ.' });
+    }
+    
+    // Gửi thông báo xác nhận mã OTP thành công
+    return res.status(200).json({ message: 'Mã OTP xác nhận thành công.' });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi server",
+    });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { email, newPassword, confirmPassword } = req.body;
+    
+    // Kiểm tra xem mật khẩu mới và xác nhận mật khẩu mới có khớp nhau
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: 'Mật khẩu và xác nhận mật khẩu không khớp.' });
+    }
+    
+    // Tại đây, xác minh mã OTP và mật khẩu đã thành công, tiến hành cập nhật mật khẩu
+    const hashedPassword = await bcryptjs.hash(newPassword, 15);
+    
+    // Cập nhật mật khẩu và xóa mã OTP
+    const user = await User.findOne({ email });
+    if (user) {
+      user.password = hashedPassword;
+      user.otp = null;
+      await user.save();
+    }
+    
+    return res.status(200).json({ message: 'Mật khẩu đã được đổi thành công.' });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi server",
+    });
+  }
+};
+
+export const resendOTP = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ message: "Email không tồn tại" });
+    }
+
+    // Tạo mã OTP ngẫu nhiên
+    const otp = Math.floor(1000 + Math.random() * 9000);
+
+    // Gửi lại mã OTP qua email
+    const emailSent = await sendEmail(email, otp);
+
+    if (emailSent) {
+      // Cập nhật mã OTP mới vào cơ sở dữ liệu
+      user.otp = otp;
+      await user.save();
+
+      return res.status(200).json({ message: "Mã OTP mới đã được gửi qua email." });
+    } else {
+      return res.status(500).json({ message: "Lỗi khi gửi lại email xác nhận." });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Lỗi server",
+    });
+  }
+};
+
+async function sendEmail(email, otp) {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: "truongduy97a@gmail.com",
+        pass: "qejcmqsanvaoircm",
+      },
+    });
+
+    const info = await transporter.sendMail({
+      from: "your-email@gmail.com",
+      to: email,
+      subject: "Mã xác nhận đổi mật khẩu",
+      text: `Mã xác nhận của bạn là: ${otp}`,
+    });
+
+    console.log("Message sent: %s", info.messageId);
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}

@@ -38,7 +38,11 @@ const userSchema = new mongoose.Schema(
         isBlocked: {
             type: Boolean,
             default: false,
-        }
+        },
+        otp: {
+            type: Number,
+            default: null,
+        },
     }, { timestamps: true, versionKey: false })
 
 
