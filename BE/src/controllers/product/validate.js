@@ -23,14 +23,16 @@ const validate = async (req, res, next) => {
         error: true,
         message: "Thiếu image!",
       });
-    } else if (!req.files["thumbnail"]) {
+    }
+
+    if (!req.files["thumbnail"]) {
       return res.status(400).json({
         error: true,
         message: "Thiếu thumbnail!",
       });
     }
 
-    const category = await Category.findById(body.categoryId);
+    const category = await Category.exists({ _id: body.categoryId });
     const size = await Size.exists({
       _id: body.variants.map((variant) => variant.sizeId),
     });
@@ -43,12 +45,16 @@ const validate = async (req, res, next) => {
         error: true,
         message: "Danh mục sản phẩm không tồn tại!",
       });
-    } else if (!size) {
+    }
+
+    if (!size) {
       return res.status(404).json({
         error: true,
         message: "Kích cỡ không tồn tại!",
       });
-    } else if (!color) {
+    }
+
+    if (!color) {
       return res.status(404).json({
         error: true,
         message: "Màu sắc không tồn tại!",
