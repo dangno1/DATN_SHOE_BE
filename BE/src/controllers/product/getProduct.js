@@ -10,8 +10,6 @@ export const getAll = async (req, res) => {
     },
   };
 
-  console.log(trashcan);
-
   try {
     const { docs: products } = await Product.paginate(
       { isDelete: trashcan },

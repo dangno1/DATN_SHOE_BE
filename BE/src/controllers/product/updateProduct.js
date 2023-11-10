@@ -111,7 +111,6 @@ export const update = async (req, res) => {
     }
 
     body.variants.map(async (variant, index) => {
-      console.log(variant);
       if (variant.sizeId !== product.variants?.[index]?.sizeId) {
         await Size.findByIdAndUpdate(variant.sizeId, {
           $addToSet: {
