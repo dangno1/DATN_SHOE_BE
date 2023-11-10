@@ -1,6 +1,5 @@
 import Product from "../../models/product.js";
 import Category from "../../models/category.js";
-import productSchema from "../../schemas/product.js";
 import Size from "../../models/size.js";
 import Color from "../../models/color.js";
 

@@ -1,5 +1,7 @@
 import Product from "../../models/product.js";
 import Category from "../../models/category.js";
+import Size from "../../models/size.js";
+import Color from "../../models/color.js";
 import productSchema from "../../schemas/product.js";
 import cloudinary from "../../configs/cloudinary.js";
 
@@ -29,11 +31,30 @@ export const update = async (req, res) => {
       });
     }
 
-    const category = await Category.findById(req.body.categoryId);
+    const category = await Category.exists({ _id: body.categoryId });
+    const size = await Size.exists({
+      _id: body.variants.map((variant) => variant.sizeId),
+    });
+    const color = await Color.exists({
+      _id: body.variants.map((variant) => variant.colorId),
+    });
+
     if (!category) {
       return res.status(404).json({
         error: true,
-        message: "Danh mục sản phẩm không tồn tại",
+        message: "Danh mục sản phẩm không tồn tại!",
+      });
+    }
+    if (!size) {
+      return res.status(404).json({
+        error: true,
+        message: "Kích cỡ không tồn tại!",
+      });
+    }
+    if (!color) {
+      return res.status(404).json({
+        error: true,
+        message: "Màu sắc không tồn tại!",
       });
     }
 
@@ -46,7 +67,7 @@ export const update = async (req, res) => {
       );
     }
 
-    if (!req.files["thumbnail"] & (product.thumbnail.length === 0)) {
+    if (!req.files["thumbnail"] && product.thumbnail.length === 0) {
       return res.status(400).json({
         error: true,
         message: "Chọn tối thiểu 1 thumbnail",
@@ -74,6 +95,47 @@ export const update = async (req, res) => {
         message: "Cập nhật thất bại",
       });
     }
+
+    if (body.categoryId !== product.categoryId) {
+      await Category.findByIdAndUpdate(body.categoryId, {
+        $addToSet: {
+          products: product._id,
+        },
+      });
+
+      await Category.findByIdAndUpdate(product.categoryId, {
+        $pull: {
+          products: product._id,
+        },
+      });
+    }
+
+    body.variants.map(async (variant, index) => {
+      if (variant.sizeId !== product.variants?.[index]?.sizeId) {
+        await Size.findByIdAndUpdate(variant.sizeId, {
+          $addToSet: {
+            products: product._id,
+          },
+        });
+        await Size.findByIdAndUpdate(product.variants?.[index]?.sizeId, {
+          $pull: {
+            products: product._id,
+          },
+        });
+      }
+      if (variant.colorId !== product.variants?.[index]?.colorId) {
+        await Color.findByIdAndUpdate(variant.colorId, {
+          $addToSet: {
+            products: product._id,
+          },
+        });
+        await Color.findByIdAndUpdate(product.variants?.[index]?.colorId, {
+          $pull: {
+            products: product._id,
+          },
+        });
+      }
+    });
 
     return res.status(201).json({
       success: true,
