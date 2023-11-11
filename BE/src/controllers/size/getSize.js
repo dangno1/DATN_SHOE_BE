@@ -10,10 +10,7 @@ export const getAll = async (req, res) => {
   try {
     const { docs: sizes } = await Size.paginate({}, options);
     if (sizes.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "Không có size nào!",
-      });
+      return res.status(200).json(sizes);
     }
     return res.status(200).json(sizes);
   } catch (error) {

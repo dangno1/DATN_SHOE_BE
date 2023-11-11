@@ -10,11 +10,9 @@ export const getAll = async (req, res) => {
   try {
     const { docs: categoryes } = await Category.paginate({}, options);
     if (categoryes.length === 0) {
-      return res.status(404).json({
-        message: "Danh mục sản phẩm không tồn tại",
-      });
+      return res.status(200).json(categoryes);
     }
-    return res.status(201).json(categoryes);
+    return res.status(200).json(categoryes);
   } catch (error) {
     return res.status(500).json({
       message: error,

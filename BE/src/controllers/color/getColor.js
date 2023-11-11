@@ -11,10 +11,7 @@ export const getAll = async (req, res) => {
   try {
     const { docs: colors } = await Color.paginate({}, options);
     if (colors.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "Không có sản phẩm nào!",
-      });
+      return res.status(200).json(colors);
     }
     return res.status(201).json(colors);
   } catch (error) {

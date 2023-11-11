@@ -96,7 +96,7 @@ export const update = async (req, res) => {
       });
     }
 
-    if (body.categoryId !== product.categoryId) {
+    if (body.categoryId !== String(product.categoryId)) {
       await Category.findByIdAndUpdate(body.categoryId, {
         $addToSet: {
           products: product._id,
@@ -111,7 +111,7 @@ export const update = async (req, res) => {
     }
 
     body.variants.map(async (variant, index) => {
-      if (variant.sizeId !== product.variants?.[index]?.sizeId) {
+      if (variant.sizeId !== String(product.variants?.[index]?.sizeId)) {
         await Size.findByIdAndUpdate(variant.sizeId, {
           $addToSet: {
             products: product._id,
@@ -123,7 +123,7 @@ export const update = async (req, res) => {
           },
         });
       }
-      if (variant.colorId !== product.variants?.[index]?.colorId) {
+      if (variant.colorId !== String(product.variants?.[index]?.colorId)) {
         await Color.findByIdAndUpdate(variant.colorId, {
           $addToSet: {
             products: product._id,

@@ -11,10 +11,7 @@ export const getAll = async (req, res) => {
   try {
     const { docs: coupons } = await Coupons.paginate({}, options);
     if (coupons.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "Không có mã giảm giá nào!",
-      });
+      return res.status(200).json(coupons);
     }
     return res.status(200).json(coupons);
   } catch (error) {
