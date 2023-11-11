@@ -24,9 +24,10 @@ export const getAll = async (req, res) => {
 
 export const get = async (req, res) => {
   try {
-    const category = await Category.findById(req.params.id).populate(
-      "products"
-    );
+    const category = await Category.findById(req.params.id).populate({
+      path: "products",
+      match: { isDelete: { $eq: false } },
+    });
     if (!category) {
       return res.status(404).json({
         message: "Danh mục sản phẩm không tồn tại",

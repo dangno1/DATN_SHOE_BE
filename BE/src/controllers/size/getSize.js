@@ -4,8 +4,7 @@ export const getAll = async (req, res) => {
   const options = {
     limit: 1000000000000,
     sort: {
-      updatedAt: -1,
-      createdAt: -1,
+      value: 1,
     },
   };
   try {
