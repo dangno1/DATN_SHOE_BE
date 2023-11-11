@@ -5,7 +5,6 @@ export const getAll = async (req, res) => {
     limit: 1000000000000,
     sort: {
       updatedAt: -1,
-      createdAt: -1,
     },
   };
   try {
