@@ -1,6 +1,7 @@
 import OrderedProduct from "../../models/orderedProduct.js";
 import validateOrderedProduct from "../../schemas/orderedProduct.js";
 import nodemailer from "nodemailer";
+import moment from "moment";
 
 function generateOrderCode(length) {
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -63,8 +64,10 @@ async function sendConfirmationEmail(email, confirmationCode) {
   </div>`,
   });
 }
-
+const confirmationCode = generateConfirmationCode();
+const timer = moment().format("YYYYMMDDHHmmss");
 const addOrderedProduct = async (req, res) => {
+  // console.log(req.body);
   const result = {
     success: true,
     message: [],
@@ -92,13 +95,14 @@ const addOrderedProduct = async (req, res) => {
     const orderedProductData = {
       ...req.body,
       orderCode,
+      otp: confirmationCode,
+      timer,
     };
 
     const orderedProduct = await OrderedProduct.create(orderedProductData);
 
-    const confirmationCode = generateConfirmationCode();
-
     await sendConfirmationEmail(req.body.userEmail, confirmationCode);
+    console.log(confirmationCode);
     result.message.push("Thêm OrderedProduct thành công");
     result.data = orderedProduct;
     res.json(result);

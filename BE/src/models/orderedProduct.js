@@ -17,7 +17,10 @@ const orderedProductSchema = new Schema({
       productQuantity: Number,
     },
   ],
+  otp: String,
   orderCode: String,
+  timer: String,
+  paymentMethod: Number,
   status: String,
 });
 
