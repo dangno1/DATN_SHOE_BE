@@ -2,10 +2,15 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const commentProduct = new Schema({
-
-    UserEmail: {type: String, require: true},
-    UserName: {type: String, require: true},
-    CommentContent: {type: String, require: true}
+    ProductID: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Product'
+    },
+    UserID: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User'
+    },
+    CommentContent: { type: String, required: true },
+    DatePosted: { type: Date, default: Date.now },
 });
-
 export default mongoose.model('comment', commentProduct)
