@@ -8,13 +8,13 @@ const checkout = async (req, res) => {
   for (let product of products) {
     totalValue += product.productPrice;
   }
-  console.log(totalValue);
+  console.log(products);
 
   process.env.TZ = "Asia/Ho_Chi_Minh";
   let tmnCode = "FDJYV5RZ";
   let secretKey = "JOKURZGARYTLRNJNCGBAZTEMYWPDQMWG";
   let vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-  let returnUrl = encodeURIComponent("http://localhost:5173/");
+  let returnUrl = encodeURIComponent("http://localhost:5173/oder&history");
 
   let date = new Date();
   let createDate = moment(date).format("YYYYMMDDHHmmss");
