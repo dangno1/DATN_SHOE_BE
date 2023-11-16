@@ -67,7 +67,6 @@ async function sendConfirmationEmail(email, confirmationCode) {
 const confirmationCode = generateConfirmationCode();
 const timer = moment().format("YYYYMMDDHHmmss");
 const addOrderedProduct = async (req, res) => {
-  // console.log(req.body);
   const result = {
     success: true,
     message: [],
