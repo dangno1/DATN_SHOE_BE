@@ -56,6 +56,9 @@ const cartSchema = Joi.object({
     "number.min": "quantity phải lớn hơn hoặc bằng 1",
     "any.required": "quantity là trường bắt buộc",
   }),
+  size: Joi.required().messages({
+    "number.base": "size phải là số",
+  }),
   price: Joi.number().min(0).required().messages({
     "number.base": "price phải là số",
     "number.min": "price phải lớn hơn hoặc bằng 0",
