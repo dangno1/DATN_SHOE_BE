@@ -21,7 +21,7 @@ const checkout = async (req, res) => {
 
   let orderId = moment(date).format("DDHHmmss");
   let amount = totalValue;
-  let bankCode = "NCB";
+  let bankCode = req.body.paymentMethod;
 
   let locale = req.body.language;
   if (locale === null || locale === "") {
@@ -52,7 +52,7 @@ const checkout = async (req, res) => {
   vnp_Params["vnp_SecureHash"] = signed;
   vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
 
-  console.log(vnpUrl);
+  // console.log(vnpUrl);
   return res.status(200).json({
     success: true,
     data: vnpUrl,

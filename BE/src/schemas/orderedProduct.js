@@ -1,11 +1,7 @@
 import Joi from "joi";
 
 const orderedProductSchemaJoi = Joi.object({
-  userName: Joi.string()
-    .min(6)
-    .required()
-    .pattern(/^(?!\s)(?!.*\s$)/)
-    .message({
+  userName: Joi.string().min(6).required().pattern(/^(?!\s)(?!.*\s$)/).message({
       "string.min": "Tên người dùng phải có ít nhất 6 ký tự",
       "any.required": "Tên người dùng là trường bắt buộc",
       "string.pattern.base": "Tên người dùng không được chứa tất cả cách",
@@ -15,20 +11,13 @@ const orderedProductSchemaJoi = Joi.object({
     "string.email": "userEmail phải là địa chỉ email hợp lệ",
     "any.required": "userEmail là trường bắt buộc",
   }),
-  userAddress: Joi.string()
-    .trim()
-    .min(3)
-    .required()
-    .messages({
+  userAddress: Joi.string().trim().min(3).required().messages({
       "string.empty": "userAddress không được bỏ trống",
       "any.required": "userAddress là trường bắt buộc",
       "string.min": "userAddress phải có ít nhất 3 ký tự",
       "string.trim": "userAddress không được chứa tất cả là khoảng trắng",
     }),
-  userPhone: Joi.string()
-    .length(10)
-    .pattern(/^[0-9]+$/)
-    .required(),
+  userPhone: Joi.string().length(10).pattern(/^[0-9]+$/).required(),
   products: Joi.array().items(
     Joi.object({
       productName: Joi.string()
@@ -91,6 +80,7 @@ const orderedProductSchemaJoi = Joi.object({
       }),
     })
   ),
+  paymentMethod: Joi.string().required(),
   status: Joi.string().valid("Chờ Xác Nhận", "Đang Chuẩn Bị Hàng", "Đơn Hàng Đang Đến Với Bạn").required(),
 }).options({ abortEarly: false });
 
