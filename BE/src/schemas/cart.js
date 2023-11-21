@@ -13,24 +13,9 @@ const cartSchema = Joi.object({
     "any.required": "userEmail là trường bắt buộc",
   }),
   userAddress: Joi.string()
-    .trim()
-    .min(3)
-    .pattern(/^[^\d\s]+$/)
-    .required()
-    .custom((value, helpers) => {
-      if (/^\s+$/.test(value)) {
-        return helpers.message(
-          "userAddress không được chứa tất cả là khoảng trắng"
-        );
-      }
-      return value;
-    })
+     
     .messages({
-      "string.empty": "userAddress không được bỏ trống",
-      "any.required": "userAddress là trường bắt buộc",
-      "string.min": "userAddress phải có ít nhất 3 ký tự",
-      "string.pattern.base": "userAddress không được chứa số",
-      "string.trim": "userAddress không được chứa tất cả là khoảng trắng",
+    
     }),
   productName: Joi.string()
     .trim()
