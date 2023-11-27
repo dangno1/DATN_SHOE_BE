@@ -1,7 +1,7 @@
 import express from 'express';
 import { createComment } from '../controllers/Comment/createComment';
 import {getComments} from '../controllers/Comment/getComment'
-import { deleteComment } from '../controllers/Comment/deleteComment';
+import { deleteComment } from '../controllers/comment/deleteComment';
 import { getcommentID } from '../controllers/Comment/getcommentID';
 import { checkPermission } from '../middlewares/checkPermision';
 const commentRouter = express.Router();
