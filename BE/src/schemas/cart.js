@@ -13,7 +13,10 @@ const cartSchema = Joi.object({
     "any.required": "userEmail là trường bắt buộc",
   }),
   userAddress: Joi.string()
+
     .messages({
+    
+
     }),
   productName: Joi.string()
     .trim()

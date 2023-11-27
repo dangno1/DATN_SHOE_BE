@@ -4,6 +4,7 @@ import Product from "../../models/product.js";
 export const remove = async (req, res) => {
   try {
     const category = await Category.findByIdAndDelete(req.params.id); // Xóa category dựa vào id
+    const categorys = await Category.find();
 
     // Thông báo lỗi nếu category không tồn tại
     if (!category) {
@@ -14,9 +15,22 @@ export const remove = async (req, res) => {
     }
 
     // Xóa categoryId trong bảng product
+    const unclassified = categorys.find(
+      (item) => item.name.toLowerCase() == "chưa phân loại"
+    );
+
     await Product.updateMany(
       { categoryId: category._id },
-      { categoryId: null }
+      { categoryId: unclassified ? unclassified._id : null }
+    );
+
+    await Category.updateMany(
+      { _id: unclassified._id },
+      {
+        products: [
+          ...new Set([...unclassified.products, ...category.products]),
+        ],
+      }
     );
 
     // Thông báo xóa category thành công
