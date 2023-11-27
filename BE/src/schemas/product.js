@@ -1,6 +1,7 @@
 import joi from "joi";
 
 const variantSchema = joi.object({
+  _id: joi.optional(),
   sizeId: joi.string().required().messages({
     "string.empty": "Kích cỡ không được để trống",
     "any.required": "Kích cỡ là trường bắt buộc",
