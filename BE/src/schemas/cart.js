@@ -12,8 +12,7 @@ const cartSchema = Joi.object({
     "string.email": "userEmail phải là địa chỉ email hợp lệ",
     "any.required": "userEmail là trường bắt buộc",
   }),
-  userAddress: Joi.string()
-  .messages({}),
+  userAddress: Joi.string().messages({}),
   productName: Joi.string()
     .trim()
     .min(6)
@@ -85,6 +84,7 @@ const cartSchema = Joi.object({
     "any.required": "productID là trường bắt buộc",
   }),
   image: Joi.string().required().messages({}),
+
 }).options({ abortEarly: false });
 
 const validateCart = (data) => {
