@@ -24,6 +24,7 @@ const orderedProductSchema = new Schema({
   paymentMethod: String,
   status: String,
   totalPrice: Number,
+  orderTime: String,
 });
 
 export default mongoose.model("OrderedProduct", orderedProductSchema);
