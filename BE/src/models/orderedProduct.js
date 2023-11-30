@@ -15,6 +15,7 @@ const orderedProductSchema = new Schema({
       productColor: String,
       productSize: Number,
       productQuantity: Number,
+      productID: String,
     },
   ],
   otp: String,
@@ -22,6 +23,8 @@ const orderedProductSchema = new Schema({
   timer: String,
   paymentMethod: String,
   status: String,
+  totalPrice: Number,
+  orderTime: String,
 });
 
 export default mongoose.model("OrderedProduct", orderedProductSchema);

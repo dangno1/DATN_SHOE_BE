@@ -12,11 +12,7 @@ const cartSchema = Joi.object({
     "string.email": "userEmail phải là địa chỉ email hợp lệ",
     "any.required": "userEmail là trường bắt buộc",
   }),
-  userAddress: Joi.string()
-     
-    .messages({
-    
-    }),
+  userAddress: Joi.string().messages({}),
   productName: Joi.string()
     .trim()
     .min(6)
@@ -79,12 +75,16 @@ const cartSchema = Joi.object({
       "string.min": "color phải có ít nhất 2 ký tự",
       "string.trim": "color không được chứa tất cả là khoảng trắng",
     }),
-    status: Joi.string().required().messages({
-      "string.empty": "category không được bỏ trống",
-      "any.required": "category là trường bắt buộc",
-    }),
-    image:  Joi.string().required().messages({
-    }),
+  status: Joi.string().required().messages({
+    "string.empty": "category không được bỏ trống",
+    "any.required": "category là trường bắt buộc",
+  }),
+  productID: Joi.string().required().messages({
+    "string.empty": "productID không được bỏ trống",
+    "any.required": "productID là trường bắt buộc",
+  }),
+  image: Joi.string().required().messages({}),
+
 }).options({ abortEarly: false });
 
 const validateCart = (data) => {

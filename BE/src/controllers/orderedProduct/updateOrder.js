@@ -3,7 +3,7 @@ import OrderedProduct from "../../models/orderedProduct.js";
 const updateStatus = async (req, res) => {
   try {
     const orderProduct = await OrderedProduct.findById(req.params.id);
-    orderProduct.status = "Đã xác nhận";
+    orderProduct.status = "Chờ Xác Nhận";
     await orderProduct.save();
     return res.json({
       success: true,
