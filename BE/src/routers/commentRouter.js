@@ -11,7 +11,6 @@ const commentRouter = express.Router();
 commentRouter.post('/comments', createComment);
 commentRouter.get('/comments', getComments );
 commentRouter.get('/comments/:id', getcommentID );
-commentRouter.delete('/comments/:id', deleteComment);
 commentRouter.delete('/commentAdmin/:id', deleteCommentAdmin);
 commentRouter.delete('/commentsAdmin', deleteCommentsAdmin);
 // commentRouter.delete('/comments/:id', deleteComment);
