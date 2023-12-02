@@ -1,4 +1,5 @@
 import Product from "../../models/product.js";
+import Brand from "../../models/brand.js";
 import Category from "../../models/category.js";
 import Size from "../../models/size.js";
 import Color from "../../models/color.js";
@@ -25,6 +26,13 @@ export const create = async (req, res) => {
         products: product._id,
       },
     });
+
+    await Brand.findByIdAndUpdate(product.brandId, {
+      $addToSet: {
+        products: product._id,
+      },
+    });
+
     body.variants.map(
       async (variant) =>
         await Size.findByIdAndUpdate(variant.sizeId, {
@@ -33,6 +41,7 @@ export const create = async (req, res) => {
           },
         })
     );
+
     body.variants.map(
       async (variant) =>
         await Color.findByIdAndUpdate(variant.colorId, {

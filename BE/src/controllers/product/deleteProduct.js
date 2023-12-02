@@ -1,5 +1,6 @@
 import Product from "../../models/product.js";
 import Category from "../../models/category.js";
+import Brand from "../../models/brand.js";
 import Size from "../../models/size.js";
 import Color from "../../models/color.js";
 import cloudinary from "../../configs/cloudinary.js";
@@ -36,6 +37,12 @@ export const remove = async (req, res) => {
     }
 
     await Category.findByIdAndUpdate(product.categoryId, {
+      $pull: {
+        products: product._id,
+      },
+    });
+
+    await Brand.findByIdAndUpdate(product.brandId, {
       $pull: {
         products: product._id,
       },

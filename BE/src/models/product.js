@@ -10,7 +10,10 @@ const productSchema = new mongoose.Schema(
       type: String,
       default: "Đang cập nhật",
     },
-    brand: String,
+    brandId: {
+      type: mongoose.Types.ObjectId,
+      ref: "Brand",
+    },
     categoryId: {
       type: mongoose.Types.ObjectId,
       ref: "Category",
@@ -24,7 +27,10 @@ const productSchema = new mongoose.Schema(
           type: mongoose.Types.ObjectId,
         },
         price: Number,
-        discount: Number,
+        discount: {
+          type: Number,
+          default: 0,
+        },
         amountSold: Number,
         quantity: Number,
         status: {
