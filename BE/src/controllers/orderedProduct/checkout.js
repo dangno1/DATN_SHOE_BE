@@ -3,13 +3,9 @@ import crypto from "crypto";
 import moment from "moment";
 
 const checkout = async (req, res) => {
-  let products = req.body.products;
   let totalValue = 0;
-  // for (let product of products) {
-    totalValue += req.body.totalPrice;
-  // }
+  totalValue += req.body.totalPrice;
   console.log(totalValue);
-  
 
   process.env.TZ = "Asia/Ho_Chi_Minh";
   let tmnCode = "FDJYV5RZ";
