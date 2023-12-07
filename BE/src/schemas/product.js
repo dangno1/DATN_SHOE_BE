@@ -1,7 +1,6 @@
 import joi from "joi";
 
 const variantSchema = joi.object({
-  _id: joi.optional(),
   sizeId: joi.string().required().messages({
     "string.empty": "Kích cỡ không được để trống",
     "any.required": "Kích cỡ là trường bắt buộc",
@@ -16,7 +15,11 @@ const variantSchema = joi.object({
     "number.positive": "Giá phải là một số lớn hơn 0",
     "any.required": "Giá là trường bắt buộc",
   }),
-  discount: joi.optional(),
+  discount: joi.number().integer().required().messages({
+    "number.base": "Giảm giá phải là một số",
+    "number.integer": "Giảm giá phải là một số nguyên",
+    "any.required": "Giảm giá là trường bắt buộc",
+  }),
   amountSold: joi.number().integer().required().messages({
     "number.base": "Số lượng đã bán phải là một số",
     "number.integer": "Số lượng đã bán phải là một số nguyên",
@@ -45,13 +48,14 @@ const productSchema = joi.object({
 
   thumbnail: joi.array().items(joi.any().meta({ swaggerType: "file" })),
 
-  desc: joi.string().optional().messages({
+  desc: joi.string().messages({
     "string.empty": "Mô tả sản phẩm không được để trống",
+    "any.required": "Mô tả sản phẩm là trường bắt buộc",
   }),
 
   variants: joi.array().items(variantSchema),
 
-  brandId: joi.string().required().messages({
+  brand: joi.string().required().messages({
     "string.empty": "Thương hiệu không được để trống",
     "any.required": "Thương hiệu là trường bắt buộc",
   }),

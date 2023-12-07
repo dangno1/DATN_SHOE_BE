@@ -16,7 +16,9 @@ const cartSchema = new Schema({
     image: String,
     color: String,
     status: String,
+    quantityAvailable: Number,
     productID: String,
+    variantsId: String,
 });
 
 export default mongoose.model("Cart", cartSchema);

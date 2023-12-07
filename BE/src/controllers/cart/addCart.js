@@ -18,7 +18,6 @@ const addCart = async (req, res) => {
 
   try {
     const cart = await Cart.create(req.body);
-    console.log(req.body);
     result.message.push('Thêm cart thành công');
     result.data = cart;
     res.json(result);
