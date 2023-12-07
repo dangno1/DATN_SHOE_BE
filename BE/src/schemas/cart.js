@@ -50,6 +50,9 @@ const cartSchema = Joi.object({
       "string.min": "productName phải có ít nhất 6 ký tự",
       "string.trim": "productName không được chứa tất cả là khoảng trắng",
     }),
+    quantityAvailable:Joi.number().required().messages({
+      "number.base": "quantityAvailable phải là số",
+    }),
   quantity: Joi.number().integer().min(1).required().messages({
     "number.base": "quantity phải là số",
     "number.integer": "quantity phải là số nguyên",
