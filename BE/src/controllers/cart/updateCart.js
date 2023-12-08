@@ -3,7 +3,6 @@ import Cart from "../../models/cart.js";
 export const updateQuantityCartPlus = async (req, res) => {
   try {
     const cart = await Cart.findById(req.params.id);
-
     if (!cart) {
       return res.status(404).json({
         success: false,
@@ -13,9 +12,9 @@ export const updateQuantityCartPlus = async (req, res) => {
     const initialPrice = cart.initialPrice;
 
     cart.quantity++;
-    cart.price = cart.quantity * initialPrice;
+    cart.totalPrice = cart.quantity * initialPrice;
     await cart.save();
-
+    // console.log(cart);
     return res.json({
       success: true,
       message: "Cập nhật sản phẩm thành công",
@@ -45,7 +44,7 @@ export const updateQuantityCartMinus = async (req, res) => {
       const initialPrice = cart.initialPrice;
 
       cart.quantity--;
-      cart.price = cart.quantity * initialPrice;
+      cart.totalPrice = cart.quantity * initialPrice;
       await cart.save();
     }
 

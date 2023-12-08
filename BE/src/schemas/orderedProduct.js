@@ -82,6 +82,7 @@ const orderedProductSchemaJoi = Joi.object({
         "string.empty": "productID không được bỏ trống",
         "any.required": "productID là trường bắt buộc",
       }),
+      quantityStock: Joi.number().min(0).required().messages(),
     })
   ),
   paymentMethod: Joi.string().required(),
