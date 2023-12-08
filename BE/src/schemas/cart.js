@@ -13,6 +13,7 @@ const cartSchema = Joi.object({
     "any.required": "userEmail là trường bắt buộc",
   }),
   userAddress: Joi.string().messages({}),
+
   productName: Joi.string()
     .trim()
     .min(6)
@@ -30,6 +31,9 @@ const cartSchema = Joi.object({
       "any.required": "productName là trường bắt buộc",
       "string.min": "productName phải có ít nhất 6 ký tự",
       "string.trim": "productName không được chứa tất cả là khoảng trắng",
+    }),
+    quantityAvailable:Joi.number().required().messages({
+      "number.base": "quantityAvailable phải là số",
     }),
   quantity: Joi.number().integer().min(1).required().messages({
     "number.base": "quantity phải là số",
@@ -59,6 +63,14 @@ const cartSchema = Joi.object({
     "number.min": "totalPrice phải lớn hơn hoặc bằng 0",
     "any.required": "totalPrice là trường bắt buộc",
   }),
+  productID: Joi.string().required().messages({
+    "string.empty": "productID không được bỏ trống",
+    "any.required": "productID là trường bắt buộc",
+  }),
+  variantsId: Joi.string().required().messages({
+    "string.empty": "variantsId không được bỏ trống",
+    "any.required": "variantsId là trường bắt buộc",
+  }),
   color: Joi.string()
     .trim()
     .min(2)
@@ -74,6 +86,12 @@ const cartSchema = Joi.object({
       "any.required": "color là trường bắt buộc",
       "string.min": "color phải có ít nhất 2 ký tự",
       "string.trim": "color không được chứa tất cả là khoảng trắng",
+    }),
+    status: Joi.string().required().messages({
+      "string.empty": "category không được bỏ trống",
+      "any.required": "category là trường bắt buộc",
+    }),
+    image:  Joi.string().required().messages({
     }),
   status: Joi.string().required().messages({
     "string.empty": "category không được bỏ trống",

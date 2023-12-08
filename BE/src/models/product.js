@@ -6,20 +6,15 @@ const productSchema = new mongoose.Schema(
     name: String,
     image: String,
     thumbnail: [String],
-    desc: {
-      type: String,
-      default: "Đang cập nhật",
-    },
-    brandId: {
-      type: mongoose.Types.ObjectId,
-      ref: "Brand",
-    },
+    desc: String,
+    brand: String,
     categoryId: {
       type: mongoose.Types.ObjectId,
       ref: "Category",
     },
     variants: [
       {
+        _id: false,
         sizeId: {
           type: mongoose.Types.ObjectId,
         },
@@ -27,10 +22,7 @@ const productSchema = new mongoose.Schema(
           type: mongoose.Types.ObjectId,
         },
         price: Number,
-        discount: {
-          type: Number,
-          default: 0,
-        },
+        discount: Number,
         amountSold: Number,
         quantity: Number,
         status: {
