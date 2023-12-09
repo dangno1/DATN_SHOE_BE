@@ -91,6 +91,11 @@ const cartSchema = Joi.object({
       "string.empty": "category không được bỏ trống",
       "any.required": "category là trường bắt buộc",
     }),
+    productID: Joi.string().required().messages({
+      "string.empty": "productID không được bỏ trống",
+      "any.required": "productID là trường bắt buộc",
+    }),
+    quantityStock: Joi.number().min(0).required().messages({}),
     image:  Joi.string().required().messages({
     }),
 }).options({ abortEarly: false });
