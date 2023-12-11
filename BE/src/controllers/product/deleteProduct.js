@@ -47,22 +47,18 @@ export const remove = async (req, res) => {
         products: product._id,
       },
     });
-    await Size.findByIdAndUpdate(
-      product.variants.map((variant) => variant.sizeId),
-      {
+    product.variants.map(async (variant) => {
+      await Size.findByIdAndUpdate(variant.sizeId, {
         $pull: {
           products: product._id,
         },
-      }
-    );
-    await Color.findByIdAndUpdate(
-      product.variants.map((variant) => variant.colorId),
-      {
+      });
+      await Color.findByIdAndUpdate(variant.colorId, {
         $pull: {
           products: product._id,
         },
-      }
-    );
+      });
+    });
 
     return res.status(200).json({
       success: true,
