@@ -33,23 +33,21 @@ export const create = async (req, res) => {
       },
     });
 
-    body.variants.map(
-      async (variant) =>
-        await Size.findByIdAndUpdate(variant.sizeId, {
-          $addToSet: {
-            products: product._id,
-          },
-        })
-    );
+    body.variants.map(async (variant) => {
+      await Size.findByIdAndUpdate(variant.sizeId, {
+        $addToSet: {
+          products: product._id,
+        },
+      });
+    });
 
-    body.variants.map(
-      async (variant) =>
-        await Color.findByIdAndUpdate(variant.colorId, {
-          $addToSet: {
-            products: product._id,
-          },
-        })
-    );
+    body.variants.map(async (variant) => {
+      await Color.findByIdAndUpdate(variant.colorId, {
+        $addToSet: {
+          products: product._id,
+        },
+      });
+    });
 
     return res.status(201).json({
       success: true,
