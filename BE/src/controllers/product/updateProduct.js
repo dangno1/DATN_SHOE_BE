@@ -132,11 +132,6 @@ export const update = async (req, res) => {
             products: product._id,
           },
         });
-        await Size.findByIdAndUpdate(product.variants?.[index]?.sizeId, {
-          $pull: {
-            products: product._id,
-          },
-        });
       }
       if (variant.colorId !== String(product.variants?.[index]?.colorId)) {
         await Color.findByIdAndUpdate(variant.colorId, {
@@ -144,13 +139,35 @@ export const update = async (req, res) => {
             products: product._id,
           },
         });
-        await Color.findByIdAndUpdate(product.variants?.[index]?.colorId, {
+      }
+    });
+    const updateSizeId = (await Size.find()).filter((size) =>
+      body.variants.every(
+        (variant) => String(variant.sizeId) != String(size._id)
+      )
+    );
+    const updateColorId = (await Color.find()).filter((color) =>
+      body.variants.every(
+        (variant) => String(variant.colorId) != String(color._id)
+      )
+    );
+
+    updateSizeId.length &&
+      updateSizeId.map(async (sizeId) => {
+        await Size.findByIdAndUpdate(sizeId._id, {
           $pull: {
             products: product._id,
           },
         });
-      }
-    });
+      });
+    updateColorId.length &&
+      updateColorId.map(async (colorId) => {
+        await Color.findByIdAndUpdate(colorId._id, {
+          $pull: {
+            products: product._id,
+          },
+        });
+      });
 
     return res.status(201).json({
       success: true,
