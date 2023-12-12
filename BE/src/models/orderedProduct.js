@@ -15,6 +15,8 @@ const orderedProductSchema = new Schema({
       productColor: String,
       productSize: Number,
       productQuantity: Number,
+      productID: String,
+      quantityStock: Number,
     },
   ],
   otp: String,

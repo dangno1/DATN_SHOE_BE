@@ -78,10 +78,17 @@ const orderedProductSchemaJoi = Joi.object({
         "number.min": "productQuantity phải lớn hơn hoặc bằng 1",
         "any.required": "productQuantity là trường bắt buộc",
       }),
+      productID: Joi.string().required().messages({
+        "string.empty": "productID không được bỏ trống",
+        "any.required": "productID là trường bắt buộc",
+      }),
+      quantityStock: Joi.number().min(0).required().messages(),
     })
   ),
   paymentMethod: Joi.string().required(),
-  status: Joi.string().valid("Chờ Xác Nhận", "Đang Chuẩn Bị Hàng", "Đơn Hàng Đang Đến Với Bạn").required(),
+  status: Joi.string().valid("Đã Xác Nhận", "Đang Chuẩn Bị Hàng", "Đơn Hàng Đang Đến Với Bạn").required(),
+  totalPrice: Joi.number().required(),
+  orderTime: Joi.string().required(),
 }).options({ abortEarly: false });
 
 const validateOrder = (data) => {
