@@ -20,6 +20,7 @@ const cartSchema = new Schema({
   productID: String,
   quantityStock: Number,
   variantsId: String,
+  amountSold: Number
 });
 
 export default mongoose.model("Cart", cartSchema);

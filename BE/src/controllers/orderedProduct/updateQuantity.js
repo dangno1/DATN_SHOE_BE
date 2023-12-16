@@ -2,7 +2,7 @@ import Product from "../../models/product.js";
 import { Types } from 'mongoose';
 
 const updateQuantity = async (req, res) => {
-  const { productId, variantsId, newQuantity } = req.body;
+  const { productId, variantsId, newQuantity, amountSold } = req.body;
 
   try {
     const { ObjectId } = Types;
@@ -13,7 +13,10 @@ const updateQuantity = async (req, res) => {
     };
 
     const update = {
-      $set: { "variants.$.quantity": newQuantity },
+      $set: {
+        "variants.$.quantity": newQuantity,
+        "variants.$.amountSold": amountSold,
+      },
     };
 
     const result = await Product.updateOne(filter, update);
