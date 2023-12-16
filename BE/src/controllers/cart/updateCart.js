@@ -11,7 +11,7 @@ export const updateQuantityCartPlus = async (req, res) => {
     }
     const initialPrice = cart.price;
 
-    cart.quantity++;
+    cart.quantity = req.body.quantity;
     cart.totalPrice = cart.quantity * initialPrice;
     await cart.save();
     // console.log(cart);
@@ -20,7 +20,6 @@ export const updateQuantityCartPlus = async (req, res) => {
       message: "Cập nhật sản phẩm thành công",
       data: cart,
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
