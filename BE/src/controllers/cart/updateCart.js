@@ -9,7 +9,7 @@ export const updateQuantityCartPlus = async (req, res) => {
         message: "Không tìm thấy sản phẩm trong giỏ hàng",
       });
     }
-    const initialPrice = cart.price;
+    const initialPrice = cart.totalPrice;
 
     cart.quantity = req.body.quantity;
     cart.totalPrice = cart.quantity * initialPrice;
