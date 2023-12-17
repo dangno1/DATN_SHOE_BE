@@ -9,12 +9,13 @@ export const updateQuantityCartPlus = async (req, res) => {
         message: "Không tìm thấy sản phẩm trong giỏ hàng",
       });
     }
-    const initialPrice = cart.totalPrice;
+    const initialPrice = req.body.price
+      ? req.body.price
+      : req.body.initialPrice;
 
     cart.quantity = req.body.quantity;
-    cart.totalPrice = cart.quantity * initialPrice;
+    cart.totalPrice = initialPrice * req.body.quantity;
     await cart.save();
-    // console.log(cart);
     return res.json({
       success: true,
       message: "Cập nhật sản phẩm thành công",
