@@ -96,6 +96,7 @@ const cartSchema = Joi.object({
       "any.required": "productID là trường bắt buộc",
     }),
     quantityStock: Joi.number().min(0).required().messages({}),
+    amountSold: Joi.number().min(0).required().messages({}),
     image:  Joi.string().required().messages({
     }),
 }).options({ abortEarly: false });
