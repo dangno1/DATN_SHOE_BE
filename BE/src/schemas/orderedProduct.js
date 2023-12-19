@@ -86,7 +86,7 @@ const orderedProductSchemaJoi = Joi.object({
     })
   ),
   paymentMethod: Joi.string().required(),
-  status: Joi.string().valid("Đã Xác Nhận", "Đang Chuẩn Bị Hàng", "Đơn Hàng Đang Đến Với Bạn").required(),
+  status: Joi.string().valid("Chưa Xác Nhận", "Đã Xác Nhận", "Đơn Hàng Đang Giao Đến Bạn", "Đơn Hàng Đã Giao Thành Công", "Hủy Đơn Hàng").required(),
   totalPrice: Joi.number().required(),
   orderTime: Joi.string().required(),
 }).options({ abortEarly: false });
